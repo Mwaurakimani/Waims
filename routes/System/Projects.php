@@ -35,6 +35,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('dashboard/projects/{id}/assignTeam', [ProjectController::class, 'assignTeam'])
         ->name('dashboard.project.assignTeam');
 
-
-
 });

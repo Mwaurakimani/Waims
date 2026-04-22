@@ -16,16 +16,15 @@ import AppLayout from '@/layouts/app-layout';
 
 // Wayfinder actions (Assuming these are generated)
 import Assignments from '@/pages/Dashboard/Projects/ProjectsPageComponents/assignments';
+import Financials from '@/pages/Dashboard/Projects/ProjectsPageComponents/financials';
 import Milestones from '@/pages/Dashboard/Projects/ProjectsPageComponents/milestones';
 import Overview from '@/pages/Dashboard/Projects/ProjectsPageComponents/overview';
 import { releaseFunds } from '@/wayfinder/App/Http/Controllers/ProjectController';
-import Financials from '@/pages/Dashboard/Projects/ProjectsPageComponents/financials';
 
 export default function ProjectDetailView({
     project,
     milestones,
     transactions,
-    notifications,
     managers,
     contractors,
 }: {
@@ -48,7 +47,7 @@ export default function ProjectDetailView({
         >
             <Head title={project.title} />
 
-            <div className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-12">
+            <div className="p-8">
                 {/* LEFT SIDE: MAIN CONTENT (8 Cols) */}
                 <div className="lg:col-span-8">
                     <Tabs defaultValue="overview" className="w-full">

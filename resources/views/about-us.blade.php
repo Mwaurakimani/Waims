@@ -51,6 +51,9 @@
         }</style>
 </head>
 <body class="font-sans antialiased">
+
+<div id="el"></div>
+
 @inertia
 <script>document.body.style.visibility = 'visible';</script>
 </body>

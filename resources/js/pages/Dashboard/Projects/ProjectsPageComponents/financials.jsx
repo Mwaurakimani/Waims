@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form } from '@inertiajs/react';
+import { Form, usePage } from '@inertiajs/react';
 import { Plus, DollarSign, Receipt, Calendar, Wallet } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.tsx';
 import { Button } from '@/components/ui/button.tsx';
@@ -19,6 +19,7 @@ import PaymentValidationModal from '@/pages/Dashboard/Projects/ProjectsPageCompo
 import { releaseFunds } from '@/wayfinder/App/Http/Controllers/ProjectController';
 
 export default function Financials({ project, transactions }) {
+    const {auth } = usePage().props
     const [isCreateOpen, setIsCreateOpen] = useState(false);
 
     // Get Wayfinder action details
@@ -33,83 +34,85 @@ export default function Financials({ project, transactions }) {
                 </div>
 
                 {/* Create Transaction Entry Point */}
-                <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-                    <DialogTrigger asChild>
-                        <Button size="sm" className="gap-2">
-                            <Plus size={16} /> New Transaction
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-106.25">
-                        <DialogHeader>
-                            <DialogTitle className="flex items-center gap-2">
-                                <Wallet className="text-primary" size={20} />
-                                Record New Transaction
-                            </DialogTitle>
-                        </DialogHeader>
+                {auth.user.role_name === 'Moderator' && (
+                    <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+                        <DialogTrigger asChild>
+                            <Button size="sm" className="gap-2">
+                                <Plus size={16} /> New Transaction
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-106.25">
+                            <DialogHeader>
+                                <DialogTitle className="flex items-center gap-2">
+                                    <Wallet className="text-primary" size={20} />
+                                    Record New Transaction
+                                </DialogTitle>
+                            </DialogHeader>
 
-                        {/* Inertia v2 Form Integration */}
-                        <Form
-                            action={createAction.url}
-                            method={createAction.method}
-                            onSuccess={() => setIsCreateOpen(false)}
-                            className="space-y-4 pt-4"
-                        >
-                            {(form) => (
-                                <>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="reference">Reference / Purpose</Label>
-                                        <Input
-                                            id="reference"
-                                            name="reference"
-                                            placeholder="e.g. Phase 1 Material Procurement"
-                                            required
-                                        />
-                                        {form.errors?.reference && (
-                                            <p className="text-xs text-red-500">{form.errors.reference}</p>
-                                        )}
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
+                            {/* Inertia v2 Form Integration */}
+                            <Form
+                                action={createAction.url}
+                                method={createAction.method}
+                                onSuccess={() => setIsCreateOpen(false)}
+                                className="space-y-4 pt-4"
+                            >
+                                {(form) => (
+                                    <>
                                         <div className="space-y-2">
-                                            <Label htmlFor="amount">Amount ($)</Label>
-                                            <div className="relative">
-                                                <DollarSign className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                                            <Label htmlFor="reference">Reference / Purpose</Label>
+                                            <Input
+                                                id="reference"
+                                                name="reference"
+                                                placeholder="e.g. Phase 1 Material Procurement"
+                                                required
+                                            />
+                                            {form.errors?.reference && (
+                                                <p className="text-xs text-red-500">{form.errors.reference}</p>
+                                            )}
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="amount">Amount ($)</Label>
+                                                <div className="relative">
+                                                    <DollarSign className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                                                    <Input
+                                                        id="amount"
+                                                        name="amount"
+                                                        type="number"
+                                                        step="0.01"
+                                                        className="pl-8"
+                                                        placeholder="0.00"
+                                                        required
+                                                    />
+                                                </div>
+                                                {form.errors?.amount && (
+                                                    <p className="text-xs text-red-500">{form.errors.amount}</p>
+                                                )}
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="date">Transaction Date</Label>
                                                 <Input
-                                                    id="amount"
-                                                    name="amount"
-                                                    type="number"
-                                                    step="0.01"
-                                                    className="pl-8"
-                                                    placeholder="0.00"
+                                                    id="date"
+                                                    name="date"
+                                                    type="date"
+                                                    defaultValue={new Date().toISOString().split('T')[0]}
                                                     required
                                                 />
                                             </div>
-                                            {form.errors?.amount && (
-                                                <p className="text-xs text-red-500">{form.errors.amount}</p>
-                                            )}
                                         </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="date">Transaction Date</Label>
-                                            <Input
-                                                id="date"
-                                                name="date"
-                                                type="date"
-                                                defaultValue={new Date().toISOString().split('T')[0]}
-                                                required
-                                            />
-                                        </div>
-                                    </div>
 
-                                    <DialogFooter className="pt-4">
-                                        <Button type="submit" disabled={form.processing} className="w-full">
-                                            {form.processing ? 'Recording...' : 'Save Transaction'}
-                                        </Button>
-                                    </DialogFooter>
-                                </>
-                            )}
-                        </Form>
-                    </DialogContent>
-                </Dialog>
+                                        <DialogFooter className="pt-4">
+                                            <Button type="submit" disabled={form.processing} className="w-full">
+                                                {form.processing ? 'Recording...' : 'Save Transaction'}
+                                            </Button>
+                                        </DialogFooter>
+                                    </>
+                                )}
+                            </Form>
+                        </DialogContent>
+                    </Dialog>
+                )}
             </CardHeader>
 
             <CardContent className="pt-6">

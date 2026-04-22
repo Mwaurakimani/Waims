@@ -96,7 +96,7 @@ export default function UsersView({ user, projects, reports }: Props) {
                                     projects.map((project) => (
                                         <Card
                                             key={project.id}
-                                            className="transition-shadow hover:shadow-md p-2"
+                                            className="transition-shadow hover:shadow-md p-2 cursor-pointer"
                                         >
                                             <Link href={viewProject({id:project.id})} as="CardContent" className="flex items-center justify-between p-2">
                                                 <div className="">

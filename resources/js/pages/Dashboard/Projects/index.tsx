@@ -8,6 +8,7 @@ import {
     User,
     HardHat,
     DollarSign,
+    Pickaxe,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -63,7 +64,8 @@ export default function ProjectsList({ projects }: Props) {
                 <div className="flex items-center justify-between rounded-xl border bg-card p-6 shadow-sm">
                     <div className="flex items-center gap-4">
                         <div className="rounded-lg bg-primary/10 p-3 text-primary">
-                            <Building2 size={24} />
+                            {/*<Pickaxe />*/}
+                            {/*<Building2 size={24} />*/}
                         </div>
                         <div>
                             <h1 className="text-2xl font-bold tracking-tight">
@@ -199,7 +201,7 @@ export default function ProjectsList({ projects }: Props) {
                                                     Manage Milestones
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem className="text-destructive">
-                                                    Halt Project (Dispute)
+                                                    Halt Project
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>

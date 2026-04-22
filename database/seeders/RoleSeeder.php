@@ -16,8 +16,8 @@ class RoleSeeder extends Seeder
             ['name' => 'Admin'],
             ['name' => 'Moderator'],
             ['name' => 'Project Manager'],
-            ['name' => 'Citizen'],
             ['name' => 'Contractor'],
+            ['name' => 'Citizen'],
         ];
 
         // create the roles

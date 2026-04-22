@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import {
     AlertCircle,
     BookOpen,
@@ -25,7 +25,31 @@ import {
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
+const userNav: NavItem[] = [
+    {
+        title: 'Dashboard',
+        href: dashboard(),
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Project Registry',
+        href: '/dashboard/project',
+        icon: Briefcase,
+    },
+    {
+        title: 'Financial Logs',
+        href: '/dashboard/transactions',
+        icon: Receipt,
+    },
+    {
+        title: 'Dispute Center',
+        href: '/dashboard/disputes',
+        icon: AlertCircle,
+    },
+];
+
+
+const adminNav: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
@@ -53,10 +77,18 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
+
+
 const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+    const {auth} = usePage().props;
+    const mainNavItems: NavItem[] =
+        auth.user.role_name === 'Admin' || auth.user.role_name === 'Moderator'
+            ? adminNav
+            : userNav;
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>

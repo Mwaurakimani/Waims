@@ -13,7 +13,7 @@ class ProjectCreationRequest extends FormRequest
     public function authorize(): bool
     {
         // Adjust role_id check based on your Admin ID (usually 1)
-        return Auth::check() && Auth::user()->role_id === 1;
+        return Auth::check() && (Auth::user()->role_id === 1 || Auth::user()->role_id === 2);
     }
 
     /**
@@ -28,7 +28,7 @@ class ProjectCreationRequest extends FormRequest
             'category' => ['required', 'string', 'in:infrastructure,health,education,water'],
             'budget' => ['required', 'numeric', 'min:0'],
             'estimated_end_date' => ['required', 'date', 'after:today'],
-            'manager_id' => ['required', 'exists:users,id'], // Must be a valid User ID
+            'manager_id' => ['sometimes', 'exists:users,id'], // Must be a valid User ID
         ];
     }
 

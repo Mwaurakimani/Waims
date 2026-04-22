@@ -20,4 +20,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard/users/{id}/edit', [UsersController::class, 'editUser'])
         ->name('dashboard.users.editUser');
 
+    Route::patch('dashboard/users/{id}/suspend', [UsersController::class, 'suspend'])
+        ->name('dashboard.users.suspend');
+
 });
+
+
+Route::get('/impersonate/{id}', [UsersController::class, 'impersonate'])
+    ->name('users.impersonate');

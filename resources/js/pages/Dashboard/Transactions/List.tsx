@@ -1,13 +1,7 @@
 import { Head, router } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
 import {
-    Plus,
-    Search,
-    Filter,
-    ChevronDown,
     MoreHorizontal,
-    ArrowUpRight,
-    ArrowDownLeft,
     Calendar,
     Download
 } from 'lucide-react';
@@ -15,17 +9,11 @@ import { useState } from 'react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from '@/components/ui/button';
 import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger
-} from "@/components/ui/collapsible";
-import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Input } from '@/components/ui/input';
 import {
     Table,
     TableBody,

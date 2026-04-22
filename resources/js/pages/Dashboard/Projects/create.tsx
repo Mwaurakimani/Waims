@@ -135,7 +135,7 @@ export default function ProjectCreate({ managers }: { managers: any[] }) {
                                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                         <div className="space-y-2">
                                             <Label htmlFor="budget">
-                                                Total Allocated Budget ($)
+                                                Total Allocated Budget (KES)
                                             </Label>
                                             <Input
                                                 id="budget"
@@ -167,31 +167,33 @@ export default function ProjectCreate({ managers }: { managers: any[] }) {
                                     <hr className="my-2 border-dashed" />
 
                                     {/* Personnel Assignment */}
-                                    <div className="space-y-2">
-                                        <Label htmlFor="manager_id">
-                                            Assign Project Manager
-                                        </Label>
-                                        <Select name={'manager_id'}>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select internal supervisor" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {Object.entries(managers).map(
-                                                    ([id, name]) => (
+                                    {managers?.length > 0  && (
+                                        <div className="space-y-2">
+                                            <Label htmlFor="manager_id">
+                                                Assign Project Manager
+                                            </Label>
+                                            <Select name={'manager_id'}>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select internal supervisor" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {Object.entries(
+                                                        managers,
+                                                    ).map(([id, name]) => (
                                                         <SelectItem
                                                             key={id}
                                                             value={id.toString()}
                                                         >
                                                             {name}
                                                         </SelectItem>
-                                                    ),
-                                                )}
-                                            </SelectContent>
-                                        </Select>
-                                        <InputError
-                                            message={errors.manager_id}
-                                        />
-                                    </div>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            <InputError
+                                                message={errors.manager_id}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="flex justify-end pt-4">

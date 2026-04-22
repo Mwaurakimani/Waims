@@ -5,23 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class UsersController extends Controller
 {
     public function index()
     {
+        $user = User::with('role')
+            ->paginate(20)
+            ->through(fn ($user) => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role->name ?? 'No Role',
+                'status' => 'Active',
+            ]);
+
         return Inertia::render('Dashboard/User/UsersList', [
-            'usersList' => User::with('role')
-                ->paginate(20)
-                ->through(fn ($user) => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'role' => $user->role->name ?? 'No Role',
-                    'status' => 'Active',
-                ]),
+            'usersList' => $user
         ]);
     }
 
@@ -72,7 +76,37 @@ class UsersController extends Controller
     public function editUser(string $id)
     {
         return Inertia::render('Dashboard/User/UsersEdit', [
-            "user" => User::find($id),
+            'user' => User::find($id),
         ]);
+    }
+
+    public function suspend(Request $request, User $id)
+    {
+        $user = $id;
+    }
+
+    public function impersonate(string $id)
+    {
+        $user = User::find($id);
+
+        if (! $user) {
+            return redirect()->route('dashboard')->with('error', 'User not found.');
+        }
+
+        // Check if current user can impersonate (Admin or Moderator)
+        if (! in_array(auth()->user()->role_id, [1, 2, 3, 4, 5, 6])) {
+            return redirect()->route('dashboard')->with('error', 'Unauthorized to impersonate.');
+        }
+
+        // Log the impersonation
+        Log::info('User '.auth()->id()." is impersonating user {$id}");
+
+        // Store original user in session for potential reversion
+        session(['impersonate' => true, 'original_user' => auth()->id()]);
+
+        // Login as the target user
+        Auth::login($user);
+
+        return redirect()->route('dashboard')->with('message', 'Now impersonating user.');
     }
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, router, useForm } from '@inertiajs/react';
+import { Form, router, useForm, usePage } from '@inertiajs/react';
 import {
     Plus,
     MoreVertical,
@@ -47,6 +47,7 @@ import { create } from '@/wayfinder/App/Http/Controllers/DisputeController.ts';
 export default function Milestones({ project, milestones }) {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [selectedMilestone, setSelectedMilestone] = useState(null);
+    const {auth} = usePage().props
 
     const statusStyles = {
         pending: 'bg-slate-100 text-slate-700',
@@ -104,7 +105,7 @@ export default function Milestones({ project, milestones }) {
                                 className="cursor-pointer transition-all hover:shadow-md"
                                 onClick={() => setSelectedMilestone(ms)}
                             >
-                                <CardContent className="flex items-center justify-between p-5">
+                                <CardContent className="flex items-center justify-between px-5">
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-3">
                                             <h4 className="text-lg font-bold">
@@ -175,6 +176,7 @@ export default function Milestones({ project, milestones }) {
  */
 function MilestoneForm({ project, milestone = null, onSuccess }) {
     const action = milestone ? update(milestone.id) : store(project.id);
+    const {auth} = usePage().props;
 
     return (
         <Form
@@ -276,29 +278,31 @@ function MilestoneForm({ project, milestone = null, onSuccess }) {
                         {milestone && (
                             <div className="mr-auto flex flex-wrap gap-2">
                                 {/* CONTRACTOR: Mark as Complete */}
-                                {milestone.status === 'pending' && (
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        className="border-emerald-200 text-emerald-600 hover:bg-emerald-50"
-                                        onClick={() =>
-                                            router.post(
-                                                complete(milestone.id).url,
-                                                {},
-                                                {
-                                                    onSuccess: () => {
-                                                        onSuccess();
+                                {milestone.status === 'pending' &&
+                                    auth.user?.role_name ===
+                                        'Project Manager' && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="border-emerald-200 text-emerald-600 hover:bg-emerald-50"
+                                            onClick={() =>
+                                                router.post(
+                                                    complete(milestone.id).url,
+                                                    {},
+                                                    {
+                                                        onSuccess: () => {
+                                                            onSuccess();
+                                                        },
                                                     },
-                                                },
-                                            )
-                                        }
-                                    >
-                                        Complete
-                                    </Button>
-                                )}
+                                                )
+                                            }
+                                        >
+                                            Complete
+                                        </Button>
+                                    )}
 
                                 {/* MANAGER: Approve or Reject */}
-                                {milestone.status === 'completed' && (
+                                {milestone.status === 'completed' && auth.user?.role_name === 'Project Manager' && (
                                     <>
                                         <Button
                                             type="button"
@@ -350,12 +354,11 @@ function MilestoneForm({ project, milestone = null, onSuccess }) {
                                         type="button"
                                         variant="outline"
                                         className="border-red-200 text-red-600 hover:bg-red-50"
-                                        onClick={() => router.get(
-                                            create().url,
-                                        {
-                                            milestone: milestone.id,
-                                        })
-                                    }
+                                        onClick={() =>
+                                            router.get(create().url, {
+                                                milestone: milestone.id,
+                                            })
+                                        }
                                     >
                                         Raise Dispute
                                     </Button>
@@ -402,11 +405,13 @@ function MilestoneForm({ project, milestone = null, onSuccess }) {
                                             )
                                         ) {
                                             router.delete(
-                                                destroy(milestone.id).url,{},{
+                                                destroy(milestone.id).url,
+                                                {},
+                                                {
                                                     onSuccess: () => {
                                                         onSuccess();
                                                     },
-                                                }
+                                                },
                                             );
                                         }
                                     }}

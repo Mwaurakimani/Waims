@@ -5,7 +5,8 @@ import {
     Filter,
     ChevronDown,
     MoreHorizontal,
-    UserCircle
+    UserCircle,
+    BookUser,
 } from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from "@/components/ui/badge";
@@ -32,7 +33,7 @@ import {
 } from "@/components/ui/table";
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
-import {viewUser} from '@/wayfinder/App/Http/Controllers/UsersController';
+import { suspend, viewUser} from '@/wayfinder/App/Http/Controllers/UsersController';
 import { create as CreateUser } from '@/wayfinder/routes/dashboard/users';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -138,7 +139,8 @@ export default function UsersList({usersList}:{usersList:any}) {
                                     <TableCell>
                                         <div className="flex items-center gap-3">
                                             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
-                                                <UserCircle size={20} />
+                                                <BookUser color={'green'} />
+                                                {/*<UserCircle size={20} />*/}
                                             </div>
                                             <div className="flex flex-col">
                                                 <span className="font-medium">
@@ -182,7 +184,9 @@ export default function UsersList({usersList}:{usersList:any}) {
                                                     </Link>
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem className="text-destructive">
-                                                    Suspend User
+                                                    <Link href={suspend({ id: user.id })}>
+                                                        Suspend User
+                                                    </Link>
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>

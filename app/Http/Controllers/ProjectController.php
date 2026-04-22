@@ -34,7 +34,9 @@ class ProjectController extends Controller
                     'contractor_id' => $project->contractor_id,
                     'created_at' => $project->created_at->format('M d, Y'),
                     'estimated_end_date' => $project->estimated_end_date->format('M d, Y'),
-                    'actual_completion_date' => $project->actual_completion_date ? $project->actual_completion_date->format('M d, Y') : 'N/A',
+                    'actual_completion_date' => $project->actual_completion_date ?
+                        $project->actual_completion_date->format('M d, Y') :
+                        'N/A',
                 ]),
         ]);
     }

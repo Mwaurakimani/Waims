@@ -20,10 +20,10 @@ export default function Overview({ project }) {
     };
 
     return (
-        <div className="animate-in space-y-6 duration-500 fade-in">
+        <div className="w-full animate-in space-y-6 duration-500 fade-in">
             {/* Quick Stats Banner */}
             <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-                <Card className="border-none bg-muted/30 shadow-none">
+                <Card className="border-none bg-muted/80">
                     <CardContent className="p-4">
                         <p className="text-xs font-medium text-muted-foreground uppercase">
                             Budget
@@ -33,7 +33,7 @@ export default function Overview({ project }) {
                         </p>
                     </CardContent>
                 </Card>
-                <Card className="border-none bg-muted/30 shadow-none">
+                <Card className="border-none bg-muted/80">
                     <CardContent className="p-4">
                         <p className="text-xs font-medium text-muted-foreground uppercase">
                             Status
@@ -46,7 +46,7 @@ export default function Overview({ project }) {
                         </Badge>
                     </CardContent>
                 </Card>
-                <Card className="border-none bg-muted/30 shadow-none">
+                <Card className="border-none bg-muted/80">
                     <CardContent className="p-4">
                         <p className="text-xs font-medium text-muted-foreground uppercase">
                             Progress
@@ -62,7 +62,7 @@ export default function Overview({ project }) {
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="border-none bg-muted/30 shadow-none">
+                <Card className="border-none bg-muted/80">
                     <CardContent className="p-4">
                         <p className="text-xs font-medium text-muted-foreground uppercase">
                             Deadline
@@ -77,7 +77,7 @@ export default function Overview({ project }) {
             {/* Main Info Grid */}
             <div className="grid grid-cols-1 gap-6">
                 {/* Left: Description (Huge) */}
-                <div className="space-y-4 md:col-span-2 p-10 shadow-lg rounded">
+                <div className="space-y-4 rounded p-10 shadow-lg md:col-span-2">
                     <div className="space-y-2">
                         <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold">
                             <FileText size={16} className="text-primary" />
@@ -101,39 +101,37 @@ export default function Overview({ project }) {
                 </div>
 
                 {/* Right: Metadata (Condensed) */}
-                <Card className="h-fit">
-                    <CardContent className="space-y-4 p-4">
-                        <div className="flex items-center gap-3">
-                            <div className="rounded-md bg-primary/10 p-2 text-primary">
-                                <Calendar size={18} />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-bold text-muted-foreground uppercase">
-                                    Duration
-                                </p>
-                                <p className="text-xs font-medium">
-                                    {project.start_date ?? 'N/A'} -
-                                    {formatDate(project.estimated_end_date)}
-                                </p>
-                            </div>
+                <div className="space-y-4 rounded p-8 shadow-lg md:col-span-2">
+                    <div className="flex items-center gap-3">
+                        <div className="rounded-md p-2 text-primary">
+                            <Calendar size={18} />
                         </div>
-
-                        <div className="flex items-center gap-3">
-                            <div className="rounded-md bg-primary/10 p-2 text-primary">
-                                <DollarSign size={18} />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-bold text-muted-foreground uppercase">
-                                    Spent to Date
-                                </p>
-                                <p className="text-xs font-medium">
-                                    $
-                                    {project.total_paid?.toLocaleString() ||
-                                        '0'}
-                                </p>
-                            </div>
+                        <div>
+                            <p className="text-[10px] font-bold text-muted-foreground uppercase">
+                                Duration
+                            </p>
+                            <p className="text-xs font-medium">
+                                {project.start_date ?? 'N/A'} -
+                                {formatDate(project.estimated_end_date)}
+                            </p>
                         </div>
+                    </div>
 
+                    <div className="flex items-center gap-3">
+                        <div className="rounded-md bg-primary/10 p-2 text-primary">
+                            <DollarSign size={18} />
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-bold text-muted-foreground uppercase">
+                                Spent to Date
+                            </p>
+                            <p className="text-xs font-medium">
+                                KES {project.total_paid?.toLocaleString() || '0'}
+                            </p>
+                        </div>
+                    </div>
+
+                    {project?.manager?.name && (
                         <div className="flex items-center gap-3">
                             <div className="rounded-md bg-primary/10 p-2 text-primary">
                                 <User size={18} />
@@ -147,22 +145,24 @@ export default function Overview({ project }) {
                                 </p>
                             </div>
                         </div>
+                    )}
 
+                    {project?.contractor?.name && (
                         <div className="flex items-center gap-3">
                             <div className="rounded-md bg-primary/10 p-2 text-primary">
-                                <Briefcase size={18} />
+                                <User size={18} />
                             </div>
                             <div>
                                 <p className="text-[10px] font-bold text-muted-foreground uppercase">
-                                    Contractor
+                                    Client
                                 </p>
                                 <p className="text-xs font-medium">
-                                    {project?.contractor?.name || 'N/A'}
+                                    {project.contractor.name || 'N/A'}
                                 </p>
                             </div>
                         </div>
-                    </CardContent>
-                </Card>
+                    )}
+                </div>
             </div>
         </div>
     );

@@ -1,9 +1,10 @@
-import { Head } from '@inertiajs/react';
+import { Head, useHttp } from '@inertiajs/react';
 import { LayoutDashboard, ArrowRight, ShieldCheck, Users, BarChart3 } from 'lucide-react';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { register } from '@/routes';
 import { store as loginStore } from '@/routes/login';
+import { useEffect } from 'react';
 
 type Props = {
     auth: { user: any };
@@ -12,6 +13,18 @@ type Props = {
 };
 
 export default function Welcome({ auth, canLogin, canRegister }: Props) {
+    const {get}  =  useHttp({
+        preserveState: true,
+        preserveScroll: true,
+    })
+
+    useEffect(() => {
+        get('/api/get-all-users').then((res) => {
+            console.log(res);
+        });
+    }, [])
+
+
     return (
         <div className="min-h-screen bg-background text-foreground">
             <Head title="Welcome" />

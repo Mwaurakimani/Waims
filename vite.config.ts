@@ -3,9 +3,10 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
-
+import inertia from '@inertiajs/vite';
 
 //this is the change
+// @ts-ignore
 export default defineConfig({
     plugins: [
         laravel({
@@ -14,14 +15,14 @@ export default defineConfig({
             refresh: [
                 {
                     paths: [
-                        'resources/**',
+                        // 'resources/**',
                         'routes/**',
                         'app/Http/Controllers/**',
                     ],
-                    config: { delay: 300 }
                 },
             ],
         }),
+        inertia(),
         react({
             babel: {
                 plugins: ['babel-plugin-react-compiler'],
@@ -31,10 +32,6 @@ export default defineConfig({
         wayfinder({
             command: 'herd php artisan wayfinder:generate',
             formVariants: true,
-            watch: [
-                'app/Http/Controllers/**/*.php',
-                'routes/**/*.php',
-            ],
         }),
     ],
     esbuild: {
