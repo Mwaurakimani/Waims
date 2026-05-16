@@ -1,6 +1,7 @@
 import { Head, Form } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
 import { ArrowLeft, UserPlus } from 'lucide-react';
+import UsersController from '@/actions/App/Http/Controllers/UsersController';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,7 +16,6 @@ import {
 import { Spinner } from '@/components/ui/spinner';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
-import { store } from '@/wayfinder/App/Http/Controllers/UsersController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -38,9 +38,7 @@ export default function UsersCreate() {
                             </Link>
                         </Button>
                         <div>
-                            <h1 className="text-2xl font-bold tracking-tight">
-                                Create User
-                            </h1>
+                            <h1 className="text-2xl font-bold tracking-tight">Create User</h1>
                             <p className="text-sm text-muted-foreground">
                                 Add a new staff member, contractor, or official.
                             </p>
@@ -50,28 +48,20 @@ export default function UsersCreate() {
 
                 {/* Form Card */}
                 <div className="rounded-xl border bg-card p-8 shadow-sm">
-                    <Form {...store.form()} className="space-y-6">
+                    <Form {...UsersController.store.form()} className="space-y-6">
                         {({ processing, errors }) => (
                             <>
                                 <div className="grid gap-4">
                                     {/* Full Name */}
                                     <div className="space-y-2">
                                         <Label htmlFor="name">Full Name</Label>
-                                        <Input
-                                            id="name"
-                                            name="name"
-                                            placeholder="e.g. John Doe"
-                                            required
-                                            autoFocus
-                                        />
+                                        <Input id="name" name="name" placeholder="e.g. John Doe" required autoFocus />
                                         <InputError message={errors.name} />
                                     </div>
 
                                     {/* Email Address */}
                                     <div className="space-y-2">
-                                        <Label htmlFor="email">
-                                            Email Address
-                                        </Label>
+                                        <Label htmlFor="email">Email Address</Label>
                                         <Input
                                             id="email"
                                             type="email"
@@ -84,52 +74,34 @@ export default function UsersCreate() {
 
                                     {/* Role Selection */}
                                     <div className="space-y-2">
-                                        <Label htmlFor="role">
-                                            System Role
-                                        </Label>
+                                        <Label htmlFor="role">System Role</Label>
                                         <Select name="role">
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Assign a role" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="1">
-                                                    Admin
-                                                </SelectItem>
-                                                <SelectItem value="2">
-                                                    Moderator
-                                                </SelectItem>
-                                                <SelectItem value="3">
-                                                    Project Manager
-                                                </SelectItem>
-                                                <SelectItem value="4">
-                                                    Citizen
-                                                </SelectItem>
-                                                <SelectItem value="5">
-                                                    Contractor
-                                                </SelectItem>
+                                                <SelectItem value="1">Admin</SelectItem>
+                                                <SelectItem value="2">Moderator</SelectItem>
+                                                <SelectItem value="3">Project Manager</SelectItem>
+                                                <SelectItem value="4">Citizen</SelectItem>
+                                                <SelectItem value="5">Contractor</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <InputError message={errors.role} />
                                         <p className="text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-                                            Controls dashboard access and
-                                            permissions
+                                            Controls dashboard access and permissions
                                         </p>
                                     </div>
 
                                     {/* Temporary Password Notice */}
                                     <div className="rounded-lg border border-dashed bg-muted/50 p-4 text-xs text-muted-foreground">
-                                        Note: A default password will be
-                                        generated and sent to the user's email
-                                        address for their first login.
+                                        Note: A default password will be generated and sent to the user's email address
+                                        for their first login.
                                     </div>
                                 </div>
 
                                 <div className="flex justify-end pt-4">
-                                    <Button
-                                        type="submit"
-                                        disabled={processing}
-                                        className="w-full px-8 sm:w-auto"
-                                    >
+                                    <Button type="submit" disabled={processing} className="w-full px-8 sm:w-auto">
                                         {processing ? (
                                             <Spinner className="mr-2" />
                                         ) : (

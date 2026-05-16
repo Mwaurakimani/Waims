@@ -5,22 +5,12 @@ import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
 import inertia from '@inertiajs/vite';
 
-//this is the change
-// @ts-ignore
 export default defineConfig({
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
-            ssr: 'resources/js/ssr.tsx',
-            refresh: [
-                {
-                    paths: [
-                        // 'resources/**',
-                        'routes/**',
-                        'app/Http/Controllers/**',
-                    ],
-                },
-            ],
+            // ssr: 'resources/js/ssr.tsx',
+            refresh: false,
         }),
         inertia(),
         react({
@@ -30,7 +20,6 @@ export default defineConfig({
         }),
         tailwindcss(),
         wayfinder({
-            command: 'herd php artisan wayfinder:generate',
             formVariants: true,
         }),
     ],

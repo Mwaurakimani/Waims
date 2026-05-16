@@ -1,53 +1,23 @@
 import { useState } from 'react';
-import { Form, router, useForm, usePage } from '@inertiajs/react';
-import {
-    Plus,
-    MoreVertical,
-    CheckCircle,
-    AlertCircle,
-    Trash2,
-    Calendar,
-    FileUp,
-    X,
-    ExternalLink,
-    Clock,
-} from 'lucide-react';
+import { Form, router, usePage } from '@inertiajs/react';
+import { Plus, MoreVertical, CheckCircle, Trash2, Calendar, FileUp, Clock, TriangleAlert } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogFooter,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { formatDate } from '@/lib/utils';
-
-import {
-    store,
-    update,
-    destroy,
-} from '@/wayfinder/App/Http/Controllers/MilestoneController.ts';
-import {
-    markAsComplete as complete,
-    approve,
-    reject,
-    dispute,
-    resolve,
-} from '@/wayfinder/App/Http/Controllers/MilestoneController';
-import { create } from '@/wayfinder/App/Http/Controllers/DisputeController.ts';
-
-
+import { cn, formatDate } from '@/lib/utils';
+import MilestoneController from '@/actions/App/Http/Controllers/MilestoneController.ts';
+import DisputeController from '@/actions/App/Http/Controllers/DisputeController.ts';
+import { roles } from '@/data/data.ts';
+import { Alert } from '@/components/ui/alert.tsx';
 
 export default function Milestones({ project, milestones }) {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [selectedMilestone, setSelectedMilestone] = useState(null);
-    const {auth} = usePage().props
+    const { auth } = usePage().props;
 
     const statusStyles = {
         pending: 'bg-slate-100 text-slate-700',
@@ -55,38 +25,36 @@ export default function Milestones({ project, milestones }) {
         disputed: 'bg-red-100 text-red-700',
         approved: 'bg-blue-100 text-blue-700',
     };
+    const canEdit = () => ['Project Manager', 'Moderator', 'Admin'].includes(auth?.user?.role_name);
 
     return (
         <div className="space-y-6">
             {/* Top Actions Container */}
-            <div className="flex items-center justify-between rounded-xl border border-dashed bg-muted/30 p-4">
+            <div className="flex items-center justify-between rounded-xl border bg-muted/30 p-4">
                 <div>
                     <h3 className="text-lg font-bold">Project Milestones</h3>
-                    <p className="text-sm text-muted-foreground">
-                        Track and manage deliverable phases.
-                    </p>
+                    <p className="text-sm text-muted-foreground">Track and manage deliverable phases.</p>
                 </div>
 
-                <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-                    <DialogTrigger asChild>
-                        <Button className="gap-2">
-                            <Plus size={16} /> New Milestone
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-125">
-                        <DialogHeader>
-                            <DialogTitle>Create New Milestone</DialogTitle>
-                        </DialogHeader>
-                        <MilestoneForm
-                            project={project}
-                            onSuccess={() => setIsAddOpen(false)}
-                        />
-                    </DialogContent>
-                </Dialog>
+                {canEdit() && (
+                    <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
+                        <DialogTrigger asChild>
+                            <Button className="gap-2">
+                                <Plus size={16} /> New Milestone
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-125">
+                            <DialogHeader>
+                                <DialogTitle>Create New Milestone</DialogTitle>
+                            </DialogHeader>
+                            <MilestoneForm project={project} onSuccess={() => setIsAddOpen(false)} />
+                        </DialogContent>
+                    </Dialog>
+                )}
             </div>
 
             {/* Chronological List */}
-            <div className="relative space-y-4 before:absolute before:inset-0 before:ml-5 before:h-full before:w-0.5 before:-translate-x-px before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+            <div className="relative space-y-4 before:absolute before:inset-0 before:ml-5 before:h-full before:w-0.5 before:-translate-x-px before:bg-linear-to-b before:from-transparent before:via-slate-300 before:to-transparent">
                 {milestones.length > 0 ? (
                     milestones.map((ms) => (
                         <div key={ms.id} className="group relative pl-12">
@@ -94,11 +62,7 @@ export default function Milestones({ project, milestones }) {
                             <div
                                 className={`absolute left-0 z-10 mt-1 flex h-10 w-10 items-center justify-center rounded-full border-4 border-background shadow-sm ${statusStyles[ms.status]}`}
                             >
-                                {ms.status === 'completed' ? (
-                                    <CheckCircle size={18} />
-                                ) : (
-                                    <Clock size={18} />
-                                )}
+                                {ms.status === 'completed' ? <CheckCircle size={18} /> : <Clock size={18} />}
                             </div>
 
                             <Card
@@ -108,9 +72,7 @@ export default function Milestones({ project, milestones }) {
                                 <CardContent className="flex items-center justify-between px-5">
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-3">
-                                            <h4 className="text-lg font-bold">
-                                                {ms.title}
-                                            </h4>
+                                            <h4 className="text-lg font-bold">{ms.title}</h4>
                                             <Badge
                                                 variant="outline"
                                                 className={`capitalize ${statusStyles[ms.status]}`}
@@ -118,19 +80,20 @@ export default function Milestones({ project, milestones }) {
                                                 {ms.status}
                                             </Badge>
                                         </div>
-                                        <p className="line-clamp-1 text-sm text-muted-foreground">
-                                            {ms.description}
-                                        </p>
+                                        <p className="line-clamp-1 text-sm text-muted-foreground">{ms.description}</p>
+                                        {ms.meta?.rejection_reason && (
+                                            <p className={'text-red-500 flex gap-2'}>
+                                                <TriangleAlert /> {ms.meta?.rejection_reason}
+                                            </p>
+                                        )}
                                         <div className="flex items-center gap-4 pt-1 text-xs text-muted-foreground">
                                             <span className="flex items-center gap-1">
-                                                <Calendar size={12} />{' '}
-                                                {formatDate(ms.start_date)} -{' '}
+                                                <Calendar size={12} /> {formatDate(ms.start_date)} -{' '}
                                                 {formatDate(ms.end_date)}
                                             </span>
                                             {ms.files_count > 0 && (
                                                 <span className="flex items-center gap-1">
-                                                    <FileUp size={12} />{' '}
-                                                    {ms.files_count} files
+                                                    <FileUp size={12} /> {ms.files_count} files
                                                 </span>
                                             )}
                                         </div>
@@ -143,17 +106,12 @@ export default function Milestones({ project, milestones }) {
                         </div>
                     ))
                 ) : (
-                    <div className="py-12 text-center text-muted-foreground">
-                        No milestones defined yet.
-                    </div>
+                    <div className="py-12 text-center text-muted-foreground">No milestones defined yet.</div>
                 )}
             </div>
 
             {/* Edit/Update Dialog */}
-            <Dialog
-                open={!!selectedMilestone}
-                onOpenChange={() => setSelectedMilestone(null)}
-            >
+            <Dialog open={!!selectedMilestone} onOpenChange={() => setSelectedMilestone(null)}>
                 <DialogContent className="sm:max-w-150">
                     <DialogHeader>
                         <DialogTitle>Manage Milestone</DialogTitle>
@@ -175,65 +133,78 @@ export default function Milestones({ project, milestones }) {
  * Reusable Form for Create & Edit
  */
 function MilestoneForm({ project, milestone = null, onSuccess }) {
-    const action = milestone ? update(milestone.id) : store(project.id);
-    const {auth} = usePage().props;
+    const action = milestone ? MilestoneController.update(milestone.id) : MilestoneController.store(project.id);
+    const { auth } = usePage().props;
+    let user_role = auth?.user?.role_name;
 
     return (
-        <Form
-            action={action.url}
-            method={action.method}
-            onSuccess={onSuccess}
-            className="space-y-4"
-        >
+        <Form action={action.url} method={action.method} onSuccess={onSuccess} className="space-y-4">
             {({ errors, processing }) => (
                 <>
                     <div className="space-y-2">
                         <Label>Title</Label>
-                        <Input
-                            name={'title'}
-                            defaultValue={milestone?.title || ''}
-                            placeholder="e.g., Foundation Completion"
-                        />
-                        {errors?.title && (
-                            <p className="text-xs text-red-500">
-                                {errors?.title}
-                            </p>
+                        {roles.level3.includes(user_role) ? (
+                            <>
+                                <Input
+                                    name={'title'}
+                                    defaultValue={milestone?.title || ''}
+                                    placeholder="e.g., Foundation Completion"
+                                />
+                                {errors?.title && <p className="text-xs text-red-500">{errors?.title}</p>}
+                            </>
+                        ) : (
+                            <p>{milestone?.title}</p>
                         )}
                     </div>
 
                     <div className="space-y-2">
                         <Label>Description</Label>
-                        <Textarea
-                            name={'description'}
-                            defaultValue={milestone?.description}
-                            placeholder="Describe what constitutes this phase..."
-                        />
+
+                        {roles.level3.includes(user_role) ? (
+                            <>
+                                <Textarea
+                                    name={'description'}
+                                    defaultValue={milestone?.description}
+                                    placeholder="Describe what constitutes this phase..."
+                                />
+                            </>
+                        ) : (
+                            <p>{milestone?.description}</p>
+                        )}
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label>Start Date</Label>
-                            <Input
-                                type="date"
-                                name="start_date"
-                                defaultValue={
-                                    milestone?.start_date?.split('T')[0] || ''
-                                }
-                            />
+                            {roles.level3.includes(user_role) ? (
+                                <>
+                                    <Input
+                                        type="date"
+                                        name="start_date"
+                                        defaultValue={milestone?.start_date?.split('T')[0] || ''}
+                                    />
+                                </>
+                            ) : (
+                                <p>{formatDate(milestone?.start_date)}</p>
+                            )}
                         </div>
                         <div className="space-y-2">
                             <Label>End Date (Deadline)</Label>
-                            <Input
-                                type="date"
-                                name="end_date"
-                                defaultValue={
-                                    milestone?.end_date?.split('T')[0] || ''
-                                }
-                            />
+                            {roles.level3.includes(user_role) ? (
+                                <>
+                                    <Input
+                                        type="date"
+                                        name="end_date"
+                                        defaultValue={milestone?.end_date?.split('T')[0] || ''}
+                                    />
+                                </>
+                            ) : (
+                                <p>{formatDate(milestone?.end_date)}</p>
+                            )}
                         </div>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className={cn('space-y-2', roles.level4.includes(user_role) ? '' : 'hidden')}>
                         <Label>Supporting Files</Label>
                         <Input
                             type="file"
@@ -261,10 +232,7 @@ function MilestoneForm({ project, milestone = null, onSuccess }) {
                                                 View
                                             </a>
                                             {/* To remove existing files, you'll likely need a hidden input or a separate action */}
-                                            <button
-                                                type="button"
-                                                className="text-red-500"
-                                            >
+                                            <button type="button" className="text-red-500">
                                                 Remove
                                             </button>
                                         </div>
@@ -278,31 +246,29 @@ function MilestoneForm({ project, milestone = null, onSuccess }) {
                         {milestone && (
                             <div className="mr-auto flex flex-wrap gap-2">
                                 {/* CONTRACTOR: Mark as Complete */}
-                                {milestone.status === 'pending' &&
-                                    auth.user?.role_name ===
-                                        'Project Manager' && (
-                                        <Button
-                                            type="button"
-                                            variant="outline"
-                                            className="border-emerald-200 text-emerald-600 hover:bg-emerald-50"
-                                            onClick={() =>
-                                                router.post(
-                                                    complete(milestone.id).url,
-                                                    {},
-                                                    {
-                                                        onSuccess: () => {
-                                                            onSuccess();
-                                                        },
+                                {milestone.status === 'pending' && roles.level4.includes(user_role) && (
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        className="border-emerald-200 text-emerald-600 hover:bg-emerald-50"
+                                        onClick={() =>
+                                            router.post(
+                                                MilestoneController.markAsComplete(milestone.id).url,
+                                                {},
+                                                {
+                                                    onSuccess: () => {
+                                                        onSuccess();
                                                     },
-                                                )
-                                            }
-                                        >
-                                            Complete
-                                        </Button>
-                                    )}
+                                                },
+                                            )
+                                        }
+                                    >
+                                        Complete
+                                    </Button>
+                                )}
 
                                 {/* MANAGER: Approve or Reject */}
-                                {milestone.status === 'completed' && auth.user?.role_name === 'Project Manager' && (
+                                {milestone.status === 'completed' && roles.level3.includes(user_role) && (
                                     <>
                                         <Button
                                             type="button"
@@ -310,7 +276,7 @@ function MilestoneForm({ project, milestone = null, onSuccess }) {
                                             className="border-blue-200 text-blue-600 hover:bg-blue-50"
                                             onClick={() =>
                                                 router.post(
-                                                    approve(milestone.id).url,
+                                                    MilestoneController.approve(milestone.id).url,
                                                     {},
                                                     {
                                                         onSuccess: () => {
@@ -327,13 +293,10 @@ function MilestoneForm({ project, milestone = null, onSuccess }) {
                                             variant="outline"
                                             className="border-orange-200 text-orange-600 hover:bg-orange-50"
                                             onClick={() => {
-                                                const reason = prompt(
-                                                    'Reason for rejection:',
-                                                );
+                                                const reason = prompt('Reason for rejection:');
                                                 if (reason)
                                                     router.post(
-                                                        reject(milestone.id)
-                                                            .url,
+                                                        MilestoneController.reject(milestone.id).url,
                                                         { reason },
                                                         {
                                                             onSuccess: () => {
@@ -355,7 +318,7 @@ function MilestoneForm({ project, milestone = null, onSuccess }) {
                                         variant="outline"
                                         className="border-red-200 text-red-600 hover:bg-red-50"
                                         onClick={() =>
-                                            router.get(create().url, {
+                                            router.get(DisputeController.create().url, {
                                                 milestone: milestone.id,
                                             })
                                         }
@@ -371,15 +334,13 @@ function MilestoneForm({ project, milestone = null, onSuccess }) {
                                         variant="outline"
                                         className="border-purple-200 text-purple-600 hover:bg-purple-50"
                                         onClick={() => {
-                                            const notes =
-                                                prompt('Resolution notes:');
+                                            const notes = prompt('Resolution notes:');
                                             if (notes)
                                                 router.post(
-                                                    resolve(milestone.id).url,
+                                                    MilestoneController.resolve(milestone.id).url,
                                                     {
                                                         notes,
-                                                        final_status:
-                                                            'approved', // Or logic to choose status
+                                                        final_status: 'approved', // Or logic to choose status
                                                     },
                                                     {
                                                         onSuccess: () => {
@@ -399,13 +360,9 @@ function MilestoneForm({ project, milestone = null, onSuccess }) {
                                     variant="ghost"
                                     className="text-red-500 hover:bg-red-50 hover:text-red-700"
                                     onClick={() => {
-                                        if (
-                                            confirm(
-                                                'Permanently delete this milestone?',
-                                            )
-                                        ) {
+                                        if (confirm('Permanently delete this milestone?')) {
                                             router.delete(
-                                                destroy(milestone.id).url,
+                                                MilestoneController.destroy(milestone.id).url,
                                                 {},
                                                 {
                                                     onSuccess: () => {
@@ -421,25 +378,14 @@ function MilestoneForm({ project, milestone = null, onSuccess }) {
                             </div>
                         )}
 
-                        <Button type="submit" disabled={processing}>
-                            {milestone ? 'Update Details' : 'Create Milestone'}
-                        </Button>
+                        {roles.level4.includes(user_role) && (
+                            <Button type="submit" disabled={processing}>
+                                {milestone ? 'Update Details' : 'Create Milestone'}
+                            </Button>
+                        )}
                     </DialogFooter>
                 </>
             )}
         </Form>
     );
 }
-
-// Helper handlers for buttons outside the main form
-// function updateStatus(id, status) {
-//     const action = updateMilestoneStatus(id);
-//     Form.post(action.url, { status });
-// }
-//
-// function deleteMs(id) {
-//     if (confirm('Are you sure you want to delete this milestone?')) {
-//         const action = deleteMilestone(id);
-//         Form.delete(action.url);
-//     }
-// }

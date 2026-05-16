@@ -22,8 +22,8 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
+import { viewProject } from '@/routes/dashboard/project';
 import type { BreadcrumbItem } from '@/types';
-import { viewProject } from '@/wayfinder/routes/dashboard/project';
 
 // Assuming you pass the user and their related data from the Controller
 interface Props {

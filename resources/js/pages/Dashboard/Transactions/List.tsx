@@ -1,27 +1,16 @@
 import { Head, router } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
-import {
-    MoreHorizontal,
-    Calendar,
-    Download
-} from 'lucide-react';
+import { MoreHorizontal, Calendar, Download } from 'lucide-react';
 import { useState } from 'react';
-import { Badge } from "@/components/ui/badge";
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
-} from "@/components/ui/table";
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 
@@ -29,8 +18,6 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
     { title: 'Transactions', href: '/dashboard/transactions' },
 ];
-
-
 
 function Pagination({ links }: { links: any[] }) {
     if (links.length <= 3) return null;
@@ -57,7 +44,6 @@ function Pagination({ links }: { links: any[] }) {
     );
 }
 
-
 export default function TransactionList({ transactions }: { transactions: any }) {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -69,29 +55,14 @@ export default function TransactionList({ transactions }: { transactions: any })
                 {/* Header Section (Same as your snippet) */}
                 <div className="flex flex-col items-start justify-between gap-4 rounded-xl border bg-white p-6 shadow-sm sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight">
-                            Financial Records
-                        </h1>
-                        <p className="text-sm text-muted-foreground">
-                            Manage project expenditures and fund releases.
-                        </p>
+                        <h1 className="text-2xl font-bold tracking-tight">Financial Records</h1>
+                        <p className="text-sm text-muted-foreground">Manage project expenditures and fund releases.</p>
                     </div>
                     <div className="flex gap-2">
                         <Button variant="outline" size="sm">
                             <Download className="mr-2 h-4 w-4" /> Export
                         </Button>
-                        {/*<Button*/}
-                        {/*    size="sm"*/}
-                        {/*    onClick={() => router.visit('/transactions/create')}*/}
-                        {/*>*/}
-                        {/*    <Plus className="mr-2 h-4 w-4" /> Record Transaction*/}
-                        {/*</Button>*/}
                     </div>
-                </div>
-
-                {/* Search & Filter Bar (Same logic) */}
-                <div className="flex flex-col gap-4">
-                    {/* ... (Search input and Filter toggle) */}
                 </div>
 
                 {/* Updated Table */}
@@ -103,12 +74,8 @@ export default function TransactionList({ transactions }: { transactions: any })
                                 <TableHead>Reference & Project</TableHead>
                                 <TableHead>Recorded By</TableHead>
                                 <TableHead>Status</TableHead>
-                                <TableHead className="text-right">
-                                    Amount
-                                </TableHead>
-                                <TableHead className="text-right">
-                                    Actions
-                                </TableHead>
+                                <TableHead className="text-right">Amount</TableHead>
+                                <TableHead className="text-right">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -117,19 +84,14 @@ export default function TransactionList({ transactions }: { transactions: any })
                                     <TableCell className="text-xs whitespace-nowrap text-muted-foreground">
                                         <div className="flex items-center gap-2">
                                             <Calendar size={14} />
-                                            {new Date(
-                                                tx.date,
-                                            ).toLocaleDateString()}
+                                            {new Date(tx.date).toLocaleDateString()}
                                         </div>
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex flex-col">
-                                            <span className="text-sm font-medium">
-                                                {tx.reference}
-                                            </span>
+                                            <span className="text-sm font-medium">{tx.reference}</span>
                                             <span className="text-xs text-primary">
-                                                {tx.project?.title ||
-                                                    'No Project Assigned'}
+                                                {tx.project?.title || 'No Project Assigned'}
                                             </span>
                                         </div>
                                     </TableCell>
@@ -143,48 +105,32 @@ export default function TransactionList({ transactions }: { transactions: any })
                                     </TableCell>
                                     <TableCell>
                                         <Badge
-                                            variant={
-                                                tx.status === 'released'
-                                                    ? 'default'
-                                                    : 'secondary'
-                                            }
+                                            variant={tx.status === 'released' ? 'default' : 'secondary'}
                                             className={`capitalize ${tx.status === 'released' ? 'bg-green-600 hover:bg-green-700' : ''}`}
                                         >
                                             {tx.status.replace('_', ' ')}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right font-mono font-bold">
-                                        $
-                                        {parseFloat(tx.amount).toLocaleString(
-                                            undefined,
-                                            { minimumFractionDigits: 2 },
-                                        )}
+                                        KES {parseFloat(tx.amount)
+                                        .toLocaleString('en-KE', { minimumFractionDigits: 2 })}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                >
+                                                <Button variant="ghost" size="icon">
                                                     <MoreHorizontal className="h-4 w-4" />
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem
-                                                    onClick={() =>
-                                                        router.visit(
-                                                            `/dashboard/transactions/${tx.id}`,
-                                                        )
-                                                    }
+                                                    onClick={() => router.visit(`/dashboard/transactions/${tx.id}`)}
                                                 >
                                                     View Details
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onClick={() =>
-                                                        router.visit(
-                                                            `/dashboard/transactions/${tx.id}/edit`,
-                                                        )
+                                                        router.visit(`/dashboard/transactions/${tx.id}/edit`)
                                                     }
                                                 >
                                                     Edit Record
@@ -192,14 +138,8 @@ export default function TransactionList({ transactions }: { transactions: any })
                                                 <DropdownMenuItem
                                                     className="text-destructive"
                                                     onClick={() => {
-                                                        if (
-                                                            confirm(
-                                                                'Delete this record?',
-                                                            )
-                                                        )
-                                                            router.delete(
-                                                                `/transactions/${tx.id}`,
-                                                            );
+                                                        if (confirm('Delete this record?'))
+                                                            router.delete(`/transactions/${tx.id}`);
                                                     }}
                                                 >
                                                     Delete
@@ -217,8 +157,7 @@ export default function TransactionList({ transactions }: { transactions: any })
             {/* Add pagination details and controls below the table */}
             <div className="mt-4 flex items-center justify-between px-2">
                 <p className="text-sm text-muted-foreground">
-                    Showing {transactions.from} to {transactions.to} of{' '}
-                    {transactions.total} records
+                    Showing {transactions.from} to {transactions.to} of {transactions.total} records
                 </p>
                 <Pagination links={transactions.links} />
             </div>

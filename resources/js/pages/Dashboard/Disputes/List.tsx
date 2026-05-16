@@ -1,59 +1,54 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import {
     Search,
     Filter,
     ChevronDown,
     MoreHorizontal,
     AlertCircle,
-    User,
     ExternalLink,
     Clock,
     CheckCircle2,
-    XCircle
+    XCircle,
 } from 'lucide-react';
 import { useState } from 'react';
-import { Badge } from "@/components/ui/badge";
+import DisputeController from '@/actions/App/Http/Controllers/DisputeController';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
+import { destroy, index, show } from '@/routes/dashboard/disputes';
 import type { BreadcrumbItem } from '@/types';
-import { index } from '@/wayfinder/App/Http/Controllers/DisputeController';
-import { destroy, show } from '@/wayfinder/routes/dashboard/disputes';
+import { roles } from '@/data/data';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
     { title: 'Disputes', href: '/dashboard/disputes' },
 ];
 
-export default function DisputeList({ disputes, filters }: { disputes: any, filters: any }) {
+export default function DisputeList({ disputes, filters }: { disputes: any; filters: any }) {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const user_role = usePage().props.auth.user.role_name;
 
     const getStatusIcon = (status: string) => {
         switch (status) {
-            case 'open': return <AlertCircle size={14} className="text-red-500" />;
-            case 'in_review': return <Clock size={14} className="text-orange-500" />;
-            case 'resolved': return <CheckCircle2 size={14} className="text-green-500" />;
-            case 'dismissed': return <XCircle size={14} className="text-slate-500" />;
-            default: return null;
+            case 'open':
+                return <AlertCircle size={14} className="text-red-500" />;
+            case 'in_review':
+                return <Clock size={14} className="text-orange-500" />;
+            case 'resolved':
+                return <CheckCircle2 size={14} className="text-green-500" />;
+            case 'dismissed':
+                return <XCircle size={14} className="text-slate-500" />;
+            default:
+                return null;
         }
     };
 
@@ -79,14 +74,22 @@ export default function DisputeList({ disputes, filters }: { disputes: any, filt
                                 placeholder="Search by subject..."
                                 className="pl-10"
                                 defaultValue={filters.search}
-                                onBlur={(e) => router.get(index(), { search: e.target.value }, { preserveState: true })}
+                                onBlur={(e) =>
+                                    router.get(
+                                        DisputeController.index(),
+                                        { search: e.target.value },
+                                        { preserveState: true },
+                                    )
+                                }
                             />
                         </div>
                         <Collapsible open={isFilterOpen} onOpenChange={setIsFilterOpen}>
                             <CollapsibleTrigger asChild>
                                 <Button variant="outline">
                                     <Filter className="mr-2 h-4 w-4" /> Filters
-                                    <ChevronDown className={`ml-2 h-4 w-4 transition-transform ${isFilterOpen ? 'rotate-180' : ''}`} />
+                                    <ChevronDown
+                                        className={`ml-2 h-4 w-4 transition-transform ${isFilterOpen ? 'rotate-180' : ''}`}
+                                    />
                                 </Button>
                             </CollapsibleTrigger>
                         </Collapsible>
@@ -95,10 +98,12 @@ export default function DisputeList({ disputes, filters }: { disputes: any, filt
                     <Collapsible open={isFilterOpen}>
                         <CollapsibleContent className="flex flex-wrap gap-4 rounded-lg border border-dashed bg-muted/30 p-4">
                             <div className="space-y-1.5">
-                                <label className="text-[10px] font-bold uppercase text-muted-foreground">Status</label>
+                                <label className="text-[10px] font-bold text-muted-foreground uppercase">Status</label>
                                 <select
                                     className="flex h-9 w-40 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
-                                    onChange={(e) => router.get(index(), { status: e.target.value }, { preserveState: true })}
+                                    onChange={(e) =>
+                                        router.get(index(), { status: e.target.value }, { preserveState: true })
+                                    }
                                 >
                                     <option value="">All Statuses</option>
                                     <option value="open">Open</option>
@@ -128,8 +133,8 @@ export default function DisputeList({ disputes, filters }: { disputes: any, filt
                                 <TableRow key={dispute.id} className="group">
                                     <TableCell>
                                         <div className="flex flex-col">
-                                            <span className="font-bold text-sm">{dispute.subject}</span>
-                                            <span className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                                            <span className="text-sm font-bold">{dispute.subject}</span>
+                                            <span className="mt-0.5 flex items-center gap-1 text-[10px] text-muted-foreground">
                                                 <ExternalLink size={10} />
                                                 Milestone: {dispute.milestone?.title}
                                             </span>
@@ -137,14 +142,17 @@ export default function DisputeList({ disputes, filters }: { disputes: any, filt
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-2 text-xs">
-                                            <div className="h-6 w-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold">
+                                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-[10px] font-bold">
                                                 {dispute.raiser?.name?.charAt(0)}
                                             </div>
                                             {dispute.raiser?.name}
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <Badge variant="outline" className="capitalize flex items-center gap-1.5 w-fit font-medium">
+                                        <Badge
+                                            variant="outline"
+                                            className="flex w-fit items-center gap-1.5 font-medium capitalize"
+                                        >
                                             {getStatusIcon(dispute.status)}
                                             {dispute.status.replace('_', ' ')}
                                         </Badge>
@@ -155,18 +163,25 @@ export default function DisputeList({ disputes, filters }: { disputes: any, filt
                                     <TableCell className="text-right">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button>
+                                                <Button variant="ghost" size="icon">
+                                                    <MoreHorizontal className="h-4 w-4" />
+                                                </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem onClick={() => router.visit(show(dispute.id))}>
                                                     View Details
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    className="text-destructive"
-                                                    onClick={() => { if(confirm('Delete dispute?')) router.delete(destroy(dispute.id)) }}
-                                                >
-                                                    Delete
-                                                </DropdownMenuItem>
+                                                {roles.level2.includes(user_role) && (
+                                                    <DropdownMenuItem
+                                                        className="text-destructive"
+                                                        onClick={() => {
+                                                            if (confirm('Delete dispute?'))
+                                                                router.delete(destroy(dispute.id));
+                                                        }}
+                                                    >
+                                                        Delete
+                                                    </DropdownMenuItem>
+                                                )}
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>

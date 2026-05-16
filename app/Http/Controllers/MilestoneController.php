@@ -78,9 +78,16 @@ class MilestoneController extends Controller
      */
     public function approve(Milestone $milestone)
     {
-        $milestone->update(['status' => 'approved']);
+        $meta = $milestone->meta;
 
-        // Logic to potentially release funds or trigger next project phase could go here.
+        // Remove the rejection keys if they exist
+        unset($meta['rejection_reason']);
+        unset($meta['rejected_at']);
+
+        $milestone->update([
+            'status' => 'approved',
+            'meta' => $meta
+        ]);
 
         return back()->with('success', 'Milestone approved.');
     }

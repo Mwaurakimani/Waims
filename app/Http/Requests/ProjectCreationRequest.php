@@ -12,9 +12,14 @@ class ProjectCreationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Adjust role_id check based on your Admin ID (usually 1)
+        // If running in terminal (like Wayfinder generation), skip auth check
+        if (app()->runningInConsole()) {
+            return true;
+        }
+
         return Auth::check() && (Auth::user()->role_id === 1 || Auth::user()->role_id === 2);
     }
+
 
     /**
      * Validation rules for project initiation.

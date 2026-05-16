@@ -5,10 +5,10 @@ import {
     Filter,
     ChevronDown,
     MoreHorizontal,
-    UserCircle,
     BookUser,
 } from 'lucide-react';
 import { useState } from 'react';
+import { suspend, viewUser } from '@/actions/App/Http/Controllers/UsersController';
 import { Badge } from "@/components/ui/badge";
 import { Button } from '@/components/ui/button';
 import {
@@ -33,8 +33,7 @@ import {
 } from "@/components/ui/table";
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
-import { suspend, viewUser} from '@/wayfinder/App/Http/Controllers/UsersController';
-import { create as CreateUser } from '@/wayfinder/routes/dashboard/users';
+import { create } from '@/routes/dashboard/users';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -62,7 +61,7 @@ export default function UsersList({usersList}:{usersList:any}) {
                     </div>
                     <Button
                         className="shrink-0"
-                        onClick={() => router.visit(CreateUser())}
+                        onClick={() => router.visit(create())}
                     >
                         <Plus className="mr-2 h-4 w-4" /> Create User
                     </Button>

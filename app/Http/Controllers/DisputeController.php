@@ -38,7 +38,7 @@ class DisputeController extends Controller
             'milestone_id' => 'required|exists:milestones,id',
             'subject' => 'required|string|max:255',
             'message' => 'required|string',
-            'contact_info' => 'nullable|string|max:255',
+            'contact_info' => 'required|string|max:255',
         ]);
 
         // Automatically set the raiser as the logged-in user

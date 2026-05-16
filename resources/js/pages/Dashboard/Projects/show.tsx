@@ -1,16 +1,8 @@
-import { Head, Form } from '@inertiajs/react';
-import { ShieldCheck, } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Head, Form, usePage } from '@inertiajs/react';
+import { ShieldCheck } from 'lucide-react';
+import { releaseFunds } from '@/actions/App/Http/Controllers/ProjectController';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogFooter,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
 
@@ -19,7 +11,7 @@ import Assignments from '@/pages/Dashboard/Projects/ProjectsPageComponents/assig
 import Financials from '@/pages/Dashboard/Projects/ProjectsPageComponents/financials';
 import Milestones from '@/pages/Dashboard/Projects/ProjectsPageComponents/milestones';
 import Overview from '@/pages/Dashboard/Projects/ProjectsPageComponents/overview';
-import { releaseFunds } from '@/wayfinder/App/Http/Controllers/ProjectController';
+import { roles } from '@/data/data';
 
 export default function ProjectDetailView({
     project,
@@ -53,15 +45,9 @@ export default function ProjectDetailView({
                     <Tabs defaultValue="overview" className="w-full">
                         <TabsList className="mb-4">
                             <TabsTrigger value="overview">Overview</TabsTrigger>
-                            <TabsTrigger value="assignments">
-                                Assignments
-                            </TabsTrigger>
-                            <TabsTrigger value="milestones">
-                                Milestones
-                            </TabsTrigger>
-                            <TabsTrigger value="financials">
-                                Financials
-                            </TabsTrigger>
+                            <TabsTrigger value="assignments">Assignments</TabsTrigger>
+                            <TabsTrigger value="milestones">Milestones</TabsTrigger>
+                            <TabsTrigger value="financials">Financials</TabsTrigger>
                             <TabsTrigger value="requests">Requests</TabsTrigger>
                         </TabsList>
 
@@ -72,27 +58,17 @@ export default function ProjectDetailView({
 
                         {/* Assignments Section */}
                         <TabsContent value="assignments">
-                            <Assignments
-                                project={project}
-                                managers={managers}
-                                contractors={contractors}
-                            />
+                            <Assignments project={project} managers={managers} contractors={contractors} />
                         </TabsContent>
 
                         {/* Milestones Section */}
                         <TabsContent value="milestones">
-                            <Milestones
-                                project={project}
-                                milestones={milestones}
-                            />
+                            <Milestones project={project} milestones={milestones} />
                         </TabsContent>
 
                         {/* Transaction List & Payment Section */}
                         <TabsContent value="financials">
-                            <Financials
-                                project={project}
-                                transactions={transactions}
-                            />
+                            <Financials project={project} transactions={transactions} />
                         </TabsContent>
                     </Tabs>
                 </div>
@@ -119,20 +95,13 @@ function PaymentValidationModal({ transaction }: { transaction: any }) {
                         <>
                             <div className="rounded-lg border border-orange-200 bg-orange-50 p-4">
                                 <p className="text-sm text-orange-800">
-                                    Are you sure you want to release{' '}
-                                    <strong>${transaction.amount}</strong>? This
-                                    action validates that project milestones are
-                                    verified.
+                                    Are you sure you want to release <strong>${transaction.amount}</strong>? This action
+                                    validates that project milestones are verified.
                                 </p>
                             </div>
                             <DialogFooter>
-                                <Button
-                                    type="submit"
-                                    disabled={processing}
-                                    className="w-full"
-                                >
-                                    <ShieldCheck className="mr-2" size={16} />{' '}
-                                    Confirm & Release
+                                <Button type="submit" disabled={processing} className="w-full">
+                                    <ShieldCheck className="mr-2" size={16} /> Confirm & Release
                                 </Button>
                             </DialogFooter>
                         </>

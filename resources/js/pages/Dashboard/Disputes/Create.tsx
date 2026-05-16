@@ -3,7 +3,6 @@ import { Form } from '@inertiajs/react';
 import {
     ArrowLeft,
     AlertTriangle,
-    MessageSquare,
     Phone,
     Send,
     ShieldAlert,
@@ -14,8 +13,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import { store } from '@/routes/dashboard/disputes';
 import type { BreadcrumbItem } from '@/types';
-import { store } from '@/wayfinder/routes/dashboard/disputes';
 
 export default function Create({ selectedMilestone }: { selectedMilestone: any }) {
     const breadcrumbs: BreadcrumbItem[] = [

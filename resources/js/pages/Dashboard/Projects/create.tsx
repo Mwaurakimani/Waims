@@ -16,7 +16,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
-import { store } from '@/wayfinder/App/Http/Controllers/ProjectController';
+import { store } from '@/actions/App/Http/Controllers/ProjectController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },

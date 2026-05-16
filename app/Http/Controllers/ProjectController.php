@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AssignTeamRequest;
-use App\Http\Requests\ProjectCreationRequest;
-use App\Http\Requests\ReleaseFundsRequest;
 use App\Http\Requests\UpdateMilestoneRequest;
 use App\Models\Milestone;
 use App\Models\Project;
@@ -25,18 +23,15 @@ class ProjectController extends Controller
                     'id' => $project->id,
                     'title' => $project->title,
                     'location' => $project->location,
+
                     'manager' => $project->manager->name ?? 'Unassigned',
                     'contractor' => $project->contractor->name ?? 'Unassigned',
-                    'budget' => number_format($project->budget, 2),
+
+                    'budget' => number_format($project->budget, 0),
                     'status' => ucfirst($project->status),
-                    'progress' => $project->financial_progress_percentage, // From your model's append
-                    'manager_id' => $project->manager_id,
-                    'contractor_id' => $project->contractor_id,
+                    'progress' => $project->financial_progress_percentage,
+
                     'created_at' => $project->created_at->format('M d, Y'),
-                    'estimated_end_date' => $project->estimated_end_date->format('M d, Y'),
-                    'actual_completion_date' => $project->actual_completion_date ?
-                        $project->actual_completion_date->format('M d, Y') :
-                        'N/A',
                 ]),
         ]);
     }
@@ -49,10 +44,17 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function store(ProjectCreationRequest $request)
+    public function store(Request $request)
     {
-        // The validated data is automatically available via $request->validated()
-        $validated = $request->validated();
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255', 'unique:projects,title'],
+            'description' => ['required', 'string', 'min:5'],
+            'location' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'string', 'in:infrastructure,health,education,water'],
+            'budget' => ['required', 'numeric', 'min:0'],
+            'estimated_end_date' => ['required', 'date', 'after:today'],
+            'manager_id' => ['sometimes', 'exists:users,id'], // Must be a valid User ID
+        ]);
 
         // Create the project using mass assignment
         Project::create($validated);

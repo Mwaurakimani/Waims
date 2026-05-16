@@ -22,6 +22,6 @@ createInertiaApp({
         const root = createRoot(el);
         root.render(<App {...props} />);
     },
-})
+}).then(() => console.log("loaded..."))
 
 initializeTheme();
