@@ -19,7 +19,7 @@ export default function Overview({ project }) {
     return (
         <div className="w-full animate-in space-y-6 duration-500 fade-in">
             {/* Quick Stats Banner */}
-            <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
                 <Card className="border-none bg-muted/80">
                     <CardContent className="p-4">
                         <p className="text-xs font-medium text-muted-foreground uppercase">Budget</p>
@@ -32,15 +32,6 @@ export default function Overview({ project }) {
                         <Badge variant="outline" className={`mt-1 capitalize ${statusMap[project.status] || ''}`}>
                             {project.status}
                         </Badge>
-                    </CardContent>
-                </Card>
-                <Card className="border-none bg-muted/80">
-                    <CardContent className="p-4">
-                        <p className="text-xs font-medium text-muted-foreground uppercase">Progress</p>
-                        <div className="mt-1 flex items-center gap-2">
-                            <span className="text-lg font-bold">{project.financial_progress_percentage || 0}%</span>
-                            <Progress value={project.financial_progress_percentage} className="h-1.5 w-12" />
-                        </div>
                     </CardContent>
                 </Card>
                 <Card className="border-none bg-muted/80">

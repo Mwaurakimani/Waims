@@ -72,7 +72,7 @@ class ProjectController extends Controller
             'transactions' => Transaction::where('project_id', $id)->get(),
             'notifications' => [],
             'managers' => User::where('role_id', 3)->get()->pluck('name', 'id'),
-            'contractors' => User::where('role_id', 5)->get()->pluck('name', 'id'),
+            'contractors' => User::where('role_id', 4)->get()->pluck('name', 'id'),
         ]);
     }
 

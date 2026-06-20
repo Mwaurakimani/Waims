@@ -6,6 +6,7 @@ use App\Models\Milestone;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MilestoneController extends Controller
 {
@@ -78,16 +79,30 @@ class MilestoneController extends Controller
      */
     public function approve(Milestone $milestone)
     {
-        $meta = $milestone->meta;
+        DB::transaction(function () use ($milestone) {
+            $meta = $milestone->meta;
 
-        // Remove the rejection keys if they exist
-        unset($meta['rejection_reason']);
-        unset($meta['rejected_at']);
+            // Remove the rejection keys if they exist
+            unset($meta['rejection_reason']);
+            unset($meta['rejected_at']);
 
-        $milestone->update([
-            'status' => 'approved',
-            'meta' => $meta
-        ]);
+            $milestone->update([
+                'status' => 'approved',
+                'meta' => $meta
+            ]);
+
+            $project = $milestone->project;
+
+            // Check if all milestones for the project are now approved.
+            $allApproved = $project->milestones()->where('status', '!=', 'approved')->doesntExist();
+
+            if ($allApproved) {
+                $project->update([
+                    'status' => 'completed',
+                    'actual_completion_date' => now(),
+                ]);
+            }
+        });
 
         return back()->with('success', 'Milestone approved.');
     }

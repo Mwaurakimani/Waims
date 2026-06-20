@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\MilestoneController::store
-* @see app/Http/Controllers/MilestoneController.php:15
+* @see app/Http/Controllers/MilestoneController.php:16
 * @route '/dashboard/milestones/project/{project}'
 */
 export const store = (args: { project: string | number } | [project: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\MilestoneController::store
-* @see app/Http/Controllers/MilestoneController.php:15
+* @see app/Http/Controllers/MilestoneController.php:16
 * @route '/dashboard/milestones/project/{project}'
 */
 store.url = (args: { project: string | number } | [project: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -43,7 +43,7 @@ store.url = (args: { project: string | number } | [project: string | number ] | 
 
 /**
 * @see \App\Http\Controllers\MilestoneController::store
-* @see app/Http/Controllers/MilestoneController.php:15
+* @see app/Http/Controllers/MilestoneController.php:16
 * @route '/dashboard/milestones/project/{project}'
 */
 store.post = (args: { project: string | number } | [project: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -53,7 +53,7 @@ store.post = (args: { project: string | number } | [project: string | number ] |
 
 /**
 * @see \App\Http\Controllers\MilestoneController::store
-* @see app/Http/Controllers/MilestoneController.php:15
+* @see app/Http/Controllers/MilestoneController.php:16
 * @route '/dashboard/milestones/project/{project}'
 */
 const storeForm = (args: { project: string | number } | [project: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -63,7 +63,7 @@ const storeForm = (args: { project: string | number } | [project: string | numbe
 
 /**
 * @see \App\Http\Controllers\MilestoneController::store
-* @see app/Http/Controllers/MilestoneController.php:15
+* @see app/Http/Controllers/MilestoneController.php:16
 * @route '/dashboard/milestones/project/{project}'
 */
 storeForm.post = (args: { project: string | number } | [project: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -75,7 +75,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\MilestoneController::update
-* @see app/Http/Controllers/MilestoneController.php:47
+* @see app/Http/Controllers/MilestoneController.php:48
 * @route '/dashboard/milestones/{milestone}'
 */
 export const update = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -90,7 +90,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\MilestoneController::update
-* @see app/Http/Controllers/MilestoneController.php:47
+* @see app/Http/Controllers/MilestoneController.php:48
 * @route '/dashboard/milestones/{milestone}'
 */
 update.url = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -123,7 +123,7 @@ update.url = (args: { milestone: number | { id: number } } | [milestone: number 
 
 /**
 * @see \App\Http\Controllers\MilestoneController::update
-* @see app/Http/Controllers/MilestoneController.php:47
+* @see app/Http/Controllers/MilestoneController.php:48
 * @route '/dashboard/milestones/{milestone}'
 */
 update.put = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -133,7 +133,7 @@ update.put = (args: { milestone: number | { id: number } } | [milestone: number 
 
 /**
 * @see \App\Http\Controllers\MilestoneController::update
-* @see app/Http/Controllers/MilestoneController.php:47
+* @see app/Http/Controllers/MilestoneController.php:48
 * @route '/dashboard/milestones/{milestone}'
 */
 const updateForm = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -148,7 +148,7 @@ const updateForm = (args: { milestone: number | { id: number } } | [milestone: n
 
 /**
 * @see \App\Http\Controllers\MilestoneController::update
-* @see app/Http/Controllers/MilestoneController.php:47
+* @see app/Http/Controllers/MilestoneController.php:48
 * @route '/dashboard/milestones/{milestone}'
 */
 updateForm.put = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -165,7 +165,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\MilestoneController::destroy
-* @see app/Http/Controllers/MilestoneController.php:176
+* @see app/Http/Controllers/MilestoneController.php:191
 * @route '/dashboard/milestones/{milestone}'
 */
 export const destroy = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -180,7 +180,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\MilestoneController::destroy
-* @see app/Http/Controllers/MilestoneController.php:176
+* @see app/Http/Controllers/MilestoneController.php:191
 * @route '/dashboard/milestones/{milestone}'
 */
 destroy.url = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -213,7 +213,7 @@ destroy.url = (args: { milestone: number | { id: number } } | [milestone: number
 
 /**
 * @see \App\Http\Controllers\MilestoneController::destroy
-* @see app/Http/Controllers/MilestoneController.php:176
+* @see app/Http/Controllers/MilestoneController.php:191
 * @route '/dashboard/milestones/{milestone}'
 */
 destroy.delete = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -223,7 +223,7 @@ destroy.delete = (args: { milestone: number | { id: number } } | [milestone: num
 
 /**
 * @see \App\Http\Controllers\MilestoneController::destroy
-* @see app/Http/Controllers/MilestoneController.php:176
+* @see app/Http/Controllers/MilestoneController.php:191
 * @route '/dashboard/milestones/{milestone}'
 */
 const destroyForm = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -238,7 +238,7 @@ const destroyForm = (args: { milestone: number | { id: number } } | [milestone: 
 
 /**
 * @see \App\Http\Controllers\MilestoneController::destroy
-* @see app/Http/Controllers/MilestoneController.php:176
+* @see app/Http/Controllers/MilestoneController.php:191
 * @route '/dashboard/milestones/{milestone}'
 */
 destroyForm.delete = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -255,7 +255,7 @@ destroy.form = destroyForm
 
 /**
 * @see \App\Http\Controllers\MilestoneController::complete
-* @see app/Http/Controllers/MilestoneController.php:64
+* @see app/Http/Controllers/MilestoneController.php:65
 * @route '/dashboard/milestones/{milestone}/complete'
 */
 export const complete = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -270,7 +270,7 @@ complete.definition = {
 
 /**
 * @see \App\Http\Controllers\MilestoneController::complete
-* @see app/Http/Controllers/MilestoneController.php:64
+* @see app/Http/Controllers/MilestoneController.php:65
 * @route '/dashboard/milestones/{milestone}/complete'
 */
 complete.url = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -303,7 +303,7 @@ complete.url = (args: { milestone: number | { id: number } } | [milestone: numbe
 
 /**
 * @see \App\Http\Controllers\MilestoneController::complete
-* @see app/Http/Controllers/MilestoneController.php:64
+* @see app/Http/Controllers/MilestoneController.php:65
 * @route '/dashboard/milestones/{milestone}/complete'
 */
 complete.post = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -313,7 +313,7 @@ complete.post = (args: { milestone: number | { id: number } } | [milestone: numb
 
 /**
 * @see \App\Http\Controllers\MilestoneController::complete
-* @see app/Http/Controllers/MilestoneController.php:64
+* @see app/Http/Controllers/MilestoneController.php:65
 * @route '/dashboard/milestones/{milestone}/complete'
 */
 const completeForm = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -323,7 +323,7 @@ const completeForm = (args: { milestone: number | { id: number } } | [milestone:
 
 /**
 * @see \App\Http\Controllers\MilestoneController::complete
-* @see app/Http/Controllers/MilestoneController.php:64
+* @see app/Http/Controllers/MilestoneController.php:65
 * @route '/dashboard/milestones/{milestone}/complete'
 */
 completeForm.post = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -335,7 +335,7 @@ complete.form = completeForm
 
 /**
 * @see \App\Http\Controllers\MilestoneController::approve
-* @see app/Http/Controllers/MilestoneController.php:79
+* @see app/Http/Controllers/MilestoneController.php:80
 * @route '/dashboard/milestones/{milestone}/approve'
 */
 export const approve = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -350,7 +350,7 @@ approve.definition = {
 
 /**
 * @see \App\Http\Controllers\MilestoneController::approve
-* @see app/Http/Controllers/MilestoneController.php:79
+* @see app/Http/Controllers/MilestoneController.php:80
 * @route '/dashboard/milestones/{milestone}/approve'
 */
 approve.url = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -383,7 +383,7 @@ approve.url = (args: { milestone: number | { id: number } } | [milestone: number
 
 /**
 * @see \App\Http\Controllers\MilestoneController::approve
-* @see app/Http/Controllers/MilestoneController.php:79
+* @see app/Http/Controllers/MilestoneController.php:80
 * @route '/dashboard/milestones/{milestone}/approve'
 */
 approve.post = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -393,7 +393,7 @@ approve.post = (args: { milestone: number | { id: number } } | [milestone: numbe
 
 /**
 * @see \App\Http\Controllers\MilestoneController::approve
-* @see app/Http/Controllers/MilestoneController.php:79
+* @see app/Http/Controllers/MilestoneController.php:80
 * @route '/dashboard/milestones/{milestone}/approve'
 */
 const approveForm = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -403,7 +403,7 @@ const approveForm = (args: { milestone: number | { id: number } } | [milestone: 
 
 /**
 * @see \App\Http\Controllers\MilestoneController::approve
-* @see app/Http/Controllers/MilestoneController.php:79
+* @see app/Http/Controllers/MilestoneController.php:80
 * @route '/dashboard/milestones/{milestone}/approve'
 */
 approveForm.post = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -415,7 +415,7 @@ approve.form = approveForm
 
 /**
 * @see \App\Http\Controllers\MilestoneController::reject
-* @see app/Http/Controllers/MilestoneController.php:99
+* @see app/Http/Controllers/MilestoneController.php:114
 * @route '/dashboard/milestones/{milestone}/reject'
 */
 export const reject = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -430,7 +430,7 @@ reject.definition = {
 
 /**
 * @see \App\Http\Controllers\MilestoneController::reject
-* @see app/Http/Controllers/MilestoneController.php:99
+* @see app/Http/Controllers/MilestoneController.php:114
 * @route '/dashboard/milestones/{milestone}/reject'
 */
 reject.url = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -463,7 +463,7 @@ reject.url = (args: { milestone: number | { id: number } } | [milestone: number 
 
 /**
 * @see \App\Http\Controllers\MilestoneController::reject
-* @see app/Http/Controllers/MilestoneController.php:99
+* @see app/Http/Controllers/MilestoneController.php:114
 * @route '/dashboard/milestones/{milestone}/reject'
 */
 reject.post = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -473,7 +473,7 @@ reject.post = (args: { milestone: number | { id: number } } | [milestone: number
 
 /**
 * @see \App\Http\Controllers\MilestoneController::reject
-* @see app/Http/Controllers/MilestoneController.php:99
+* @see app/Http/Controllers/MilestoneController.php:114
 * @route '/dashboard/milestones/{milestone}/reject'
 */
 const rejectForm = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -483,7 +483,7 @@ const rejectForm = (args: { milestone: number | { id: number } } | [milestone: n
 
 /**
 * @see \App\Http\Controllers\MilestoneController::reject
-* @see app/Http/Controllers/MilestoneController.php:99
+* @see app/Http/Controllers/MilestoneController.php:114
 * @route '/dashboard/milestones/{milestone}/reject'
 */
 rejectForm.post = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -495,7 +495,7 @@ reject.form = rejectForm
 
 /**
 * @see \App\Http\Controllers\MilestoneController::dispute
-* @see app/Http/Controllers/MilestoneController.php:116
+* @see app/Http/Controllers/MilestoneController.php:131
 * @route '/dashboard/milestones/{milestone}/dispute'
 */
 export const dispute = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -510,7 +510,7 @@ dispute.definition = {
 
 /**
 * @see \App\Http\Controllers\MilestoneController::dispute
-* @see app/Http/Controllers/MilestoneController.php:116
+* @see app/Http/Controllers/MilestoneController.php:131
 * @route '/dashboard/milestones/{milestone}/dispute'
 */
 dispute.url = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -543,7 +543,7 @@ dispute.url = (args: { milestone: number | { id: number } } | [milestone: number
 
 /**
 * @see \App\Http\Controllers\MilestoneController::dispute
-* @see app/Http/Controllers/MilestoneController.php:116
+* @see app/Http/Controllers/MilestoneController.php:131
 * @route '/dashboard/milestones/{milestone}/dispute'
 */
 dispute.post = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -553,7 +553,7 @@ dispute.post = (args: { milestone: number | { id: number } } | [milestone: numbe
 
 /**
 * @see \App\Http\Controllers\MilestoneController::dispute
-* @see app/Http/Controllers/MilestoneController.php:116
+* @see app/Http/Controllers/MilestoneController.php:131
 * @route '/dashboard/milestones/{milestone}/dispute'
 */
 const disputeForm = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -563,7 +563,7 @@ const disputeForm = (args: { milestone: number | { id: number } } | [milestone: 
 
 /**
 * @see \App\Http\Controllers\MilestoneController::dispute
-* @see app/Http/Controllers/MilestoneController.php:116
+* @see app/Http/Controllers/MilestoneController.php:131
 * @route '/dashboard/milestones/{milestone}/dispute'
 */
 disputeForm.post = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -575,7 +575,7 @@ dispute.form = disputeForm
 
 /**
 * @see \App\Http\Controllers\MilestoneController::resolve
-* @see app/Http/Controllers/MilestoneController.php:134
+* @see app/Http/Controllers/MilestoneController.php:149
 * @route '/dashboard/milestones/{milestone}/resolve'
 */
 export const resolve = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -590,7 +590,7 @@ resolve.definition = {
 
 /**
 * @see \App\Http\Controllers\MilestoneController::resolve
-* @see app/Http/Controllers/MilestoneController.php:134
+* @see app/Http/Controllers/MilestoneController.php:149
 * @route '/dashboard/milestones/{milestone}/resolve'
 */
 resolve.url = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -623,7 +623,7 @@ resolve.url = (args: { milestone: number | { id: number } } | [milestone: number
 
 /**
 * @see \App\Http\Controllers\MilestoneController::resolve
-* @see app/Http/Controllers/MilestoneController.php:134
+* @see app/Http/Controllers/MilestoneController.php:149
 * @route '/dashboard/milestones/{milestone}/resolve'
 */
 resolve.post = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -633,7 +633,7 @@ resolve.post = (args: { milestone: number | { id: number } } | [milestone: numbe
 
 /**
 * @see \App\Http\Controllers\MilestoneController::resolve
-* @see app/Http/Controllers/MilestoneController.php:134
+* @see app/Http/Controllers/MilestoneController.php:149
 * @route '/dashboard/milestones/{milestone}/resolve'
 */
 const resolveForm = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -643,7 +643,7 @@ const resolveForm = (args: { milestone: number | { id: number } } | [milestone: 
 
 /**
 * @see \App\Http\Controllers\MilestoneController::resolve
-* @see app/Http/Controllers/MilestoneController.php:134
+* @see app/Http/Controllers/MilestoneController.php:149
 * @route '/dashboard/milestones/{milestone}/resolve'
 */
 resolveForm.post = (args: { milestone: number | { id: number } } | [milestone: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

@@ -168,7 +168,7 @@ projects.form = projectsForm
 
 /**
 * @see \App\Http\Controllers\TransactionController::transactions
-* @see app/Http/Controllers/TransactionController.php:17
+* @see app/Http/Controllers/TransactionController.php:18
 * @route '/dashboard/transactions'
 */
 export const transactions = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -183,7 +183,7 @@ transactions.definition = {
 
 /**
 * @see \App\Http\Controllers\TransactionController::transactions
-* @see app/Http/Controllers/TransactionController.php:17
+* @see app/Http/Controllers/TransactionController.php:18
 * @route '/dashboard/transactions'
 */
 transactions.url = (options?: RouteQueryOptions) => {
@@ -192,7 +192,7 @@ transactions.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\TransactionController::transactions
-* @see app/Http/Controllers/TransactionController.php:17
+* @see app/Http/Controllers/TransactionController.php:18
 * @route '/dashboard/transactions'
 */
 transactions.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -202,7 +202,7 @@ transactions.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\TransactionController::transactions
-* @see app/Http/Controllers/TransactionController.php:17
+* @see app/Http/Controllers/TransactionController.php:18
 * @route '/dashboard/transactions'
 */
 transactions.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -212,7 +212,7 @@ transactions.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\TransactionController::transactions
-* @see app/Http/Controllers/TransactionController.php:17
+* @see app/Http/Controllers/TransactionController.php:18
 * @route '/dashboard/transactions'
 */
 const transactionsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -222,7 +222,7 @@ const transactionsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get
 
 /**
 * @see \App\Http\Controllers\TransactionController::transactions
-* @see app/Http/Controllers/TransactionController.php:17
+* @see app/Http/Controllers/TransactionController.php:18
 * @route '/dashboard/transactions'
 */
 transactionsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -232,7 +232,7 @@ transactionsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'>
 
 /**
 * @see \App\Http\Controllers\TransactionController::transactions
-* @see app/Http/Controllers/TransactionController.php:17
+* @see app/Http/Controllers/TransactionController.php:18
 * @route '/dashboard/transactions'
 */
 transactionsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

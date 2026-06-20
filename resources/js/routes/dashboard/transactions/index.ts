@@ -1,5 +1,86 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
+* @see \App\Http\Controllers\TransactionController::exportMethod
+* @see app/Http/Controllers/TransactionController.php:140
+* @route '/dashboard/transactions/export'
+*/
+export const exportMethod = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: exportMethod.url(options),
+    method: 'get',
+})
+
+exportMethod.definition = {
+    methods: ["get","head"],
+    url: '/dashboard/transactions/export',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\TransactionController::exportMethod
+* @see app/Http/Controllers/TransactionController.php:140
+* @route '/dashboard/transactions/export'
+*/
+exportMethod.url = (options?: RouteQueryOptions) => {
+    return exportMethod.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\TransactionController::exportMethod
+* @see app/Http/Controllers/TransactionController.php:140
+* @route '/dashboard/transactions/export'
+*/
+exportMethod.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: exportMethod.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\TransactionController::exportMethod
+* @see app/Http/Controllers/TransactionController.php:140
+* @route '/dashboard/transactions/export'
+*/
+exportMethod.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: exportMethod.url(options),
+    method: 'head',
+})
+
+/**
+* @see \App\Http\Controllers\TransactionController::exportMethod
+* @see app/Http/Controllers/TransactionController.php:140
+* @route '/dashboard/transactions/export'
+*/
+const exportMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: exportMethod.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\TransactionController::exportMethod
+* @see app/Http/Controllers/TransactionController.php:140
+* @route '/dashboard/transactions/export'
+*/
+exportMethodForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: exportMethod.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\TransactionController::exportMethod
+* @see app/Http/Controllers/TransactionController.php:140
+* @route '/dashboard/transactions/export'
+*/
+exportMethodForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: exportMethod.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+exportMethod.form = exportMethodForm
+
+/**
 * @see \Inertia\Controller::__invoke
 * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
 * @route '/dashboard/transactions/create'
@@ -82,7 +163,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\TransactionController::post
-* @see app/Http/Controllers/TransactionController.php:36
+* @see app/Http/Controllers/TransactionController.php:37
 * @route '/dashboard/transactions/create'
 */
 export const post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -97,7 +178,7 @@ post.definition = {
 
 /**
 * @see \App\Http\Controllers\TransactionController::post
-* @see app/Http/Controllers/TransactionController.php:36
+* @see app/Http/Controllers/TransactionController.php:37
 * @route '/dashboard/transactions/create'
 */
 post.url = (options?: RouteQueryOptions) => {
@@ -106,7 +187,7 @@ post.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\TransactionController::post
-* @see app/Http/Controllers/TransactionController.php:36
+* @see app/Http/Controllers/TransactionController.php:37
 * @route '/dashboard/transactions/create'
 */
 post.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -116,7 +197,7 @@ post.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\TransactionController::post
-* @see app/Http/Controllers/TransactionController.php:36
+* @see app/Http/Controllers/TransactionController.php:37
 * @route '/dashboard/transactions/create'
 */
 const postForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -126,7 +207,7 @@ const postForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => (
 
 /**
 * @see \App\Http\Controllers\TransactionController::post
-* @see app/Http/Controllers/TransactionController.php:36
+* @see app/Http/Controllers/TransactionController.php:37
 * @route '/dashboard/transactions/create'
 */
 postForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -138,7 +219,7 @@ post.form = postForm
 
 /**
 * @see \App\Http\Controllers\TransactionController::viewTransaction
-* @see app/Http/Controllers/TransactionController.php:85
+* @see app/Http/Controllers/TransactionController.php:86
 * @route '/dashboard/transactions/{transaction}'
 */
 export const viewTransaction = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -153,7 +234,7 @@ viewTransaction.definition = {
 
 /**
 * @see \App\Http\Controllers\TransactionController::viewTransaction
-* @see app/Http/Controllers/TransactionController.php:85
+* @see app/Http/Controllers/TransactionController.php:86
 * @route '/dashboard/transactions/{transaction}'
 */
 viewTransaction.url = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -186,7 +267,7 @@ viewTransaction.url = (args: { transaction: number | { id: number } } | [transac
 
 /**
 * @see \App\Http\Controllers\TransactionController::viewTransaction
-* @see app/Http/Controllers/TransactionController.php:85
+* @see app/Http/Controllers/TransactionController.php:86
 * @route '/dashboard/transactions/{transaction}'
 */
 viewTransaction.get = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -196,7 +277,7 @@ viewTransaction.get = (args: { transaction: number | { id: number } } | [transac
 
 /**
 * @see \App\Http\Controllers\TransactionController::viewTransaction
-* @see app/Http/Controllers/TransactionController.php:85
+* @see app/Http/Controllers/TransactionController.php:86
 * @route '/dashboard/transactions/{transaction}'
 */
 viewTransaction.head = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -206,7 +287,7 @@ viewTransaction.head = (args: { transaction: number | { id: number } } | [transa
 
 /**
 * @see \App\Http\Controllers\TransactionController::viewTransaction
-* @see app/Http/Controllers/TransactionController.php:85
+* @see app/Http/Controllers/TransactionController.php:86
 * @route '/dashboard/transactions/{transaction}'
 */
 const viewTransactionForm = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -216,7 +297,7 @@ const viewTransactionForm = (args: { transaction: number | { id: number } } | [t
 
 /**
 * @see \App\Http\Controllers\TransactionController::viewTransaction
-* @see app/Http/Controllers/TransactionController.php:85
+* @see app/Http/Controllers/TransactionController.php:86
 * @route '/dashboard/transactions/{transaction}'
 */
 viewTransactionForm.get = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -226,7 +307,7 @@ viewTransactionForm.get = (args: { transaction: number | { id: number } } | [tra
 
 /**
 * @see \App\Http\Controllers\TransactionController::viewTransaction
-* @see app/Http/Controllers/TransactionController.php:85
+* @see app/Http/Controllers/TransactionController.php:86
 * @route '/dashboard/transactions/{transaction}'
 */
 viewTransactionForm.head = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -243,7 +324,7 @@ viewTransaction.form = viewTransactionForm
 
 /**
 * @see \App\Http\Controllers\TransactionController::editTransaction
-* @see app/Http/Controllers/TransactionController.php:115
+* @see app/Http/Controllers/TransactionController.php:114
 * @route '/dashboard/transactions/{transaction}/edit'
 */
 export const editTransaction = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -258,7 +339,7 @@ editTransaction.definition = {
 
 /**
 * @see \App\Http\Controllers\TransactionController::editTransaction
-* @see app/Http/Controllers/TransactionController.php:115
+* @see app/Http/Controllers/TransactionController.php:114
 * @route '/dashboard/transactions/{transaction}/edit'
 */
 editTransaction.url = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -291,7 +372,7 @@ editTransaction.url = (args: { transaction: number | { id: number } } | [transac
 
 /**
 * @see \App\Http\Controllers\TransactionController::editTransaction
-* @see app/Http/Controllers/TransactionController.php:115
+* @see app/Http/Controllers/TransactionController.php:114
 * @route '/dashboard/transactions/{transaction}/edit'
 */
 editTransaction.get = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -301,7 +382,7 @@ editTransaction.get = (args: { transaction: number | { id: number } } | [transac
 
 /**
 * @see \App\Http\Controllers\TransactionController::editTransaction
-* @see app/Http/Controllers/TransactionController.php:115
+* @see app/Http/Controllers/TransactionController.php:114
 * @route '/dashboard/transactions/{transaction}/edit'
 */
 editTransaction.head = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -311,7 +392,7 @@ editTransaction.head = (args: { transaction: number | { id: number } } | [transa
 
 /**
 * @see \App\Http\Controllers\TransactionController::editTransaction
-* @see app/Http/Controllers/TransactionController.php:115
+* @see app/Http/Controllers/TransactionController.php:114
 * @route '/dashboard/transactions/{transaction}/edit'
 */
 const editTransactionForm = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -321,7 +402,7 @@ const editTransactionForm = (args: { transaction: number | { id: number } } | [t
 
 /**
 * @see \App\Http\Controllers\TransactionController::editTransaction
-* @see app/Http/Controllers/TransactionController.php:115
+* @see app/Http/Controllers/TransactionController.php:114
 * @route '/dashboard/transactions/{transaction}/edit'
 */
 editTransactionForm.get = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -331,7 +412,7 @@ editTransactionForm.get = (args: { transaction: number | { id: number } } | [tra
 
 /**
 * @see \App\Http\Controllers\TransactionController::editTransaction
-* @see app/Http/Controllers/TransactionController.php:115
+* @see app/Http/Controllers/TransactionController.php:114
 * @route '/dashboard/transactions/{transaction}/edit'
 */
 editTransactionForm.head = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -348,7 +429,7 @@ editTransaction.form = editTransactionForm
 
 /**
 * @see \App\Http\Controllers\TransactionController::updateTransaction
-* @see app/Http/Controllers/TransactionController.php:125
+* @see app/Http/Controllers/TransactionController.php:124
 * @route '/dashboard/transactions/{transaction}/update'
 */
 export const updateTransaction = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
@@ -363,7 +444,7 @@ updateTransaction.definition = {
 
 /**
 * @see \App\Http\Controllers\TransactionController::updateTransaction
-* @see app/Http/Controllers/TransactionController.php:125
+* @see app/Http/Controllers/TransactionController.php:124
 * @route '/dashboard/transactions/{transaction}/update'
 */
 updateTransaction.url = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -396,7 +477,7 @@ updateTransaction.url = (args: { transaction: number | { id: number } } | [trans
 
 /**
 * @see \App\Http\Controllers\TransactionController::updateTransaction
-* @see app/Http/Controllers/TransactionController.php:125
+* @see app/Http/Controllers/TransactionController.php:124
 * @route '/dashboard/transactions/{transaction}/update'
 */
 updateTransaction.patch = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
@@ -406,7 +487,7 @@ updateTransaction.patch = (args: { transaction: number | { id: number } } | [tra
 
 /**
 * @see \App\Http\Controllers\TransactionController::updateTransaction
-* @see app/Http/Controllers/TransactionController.php:125
+* @see app/Http/Controllers/TransactionController.php:124
 * @route '/dashboard/transactions/{transaction}/update'
 */
 const updateTransactionForm = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -421,7 +502,7 @@ const updateTransactionForm = (args: { transaction: number | { id: number } } | 
 
 /**
 * @see \App\Http\Controllers\TransactionController::updateTransaction
-* @see app/Http/Controllers/TransactionController.php:125
+* @see app/Http/Controllers/TransactionController.php:124
 * @route '/dashboard/transactions/{transaction}/update'
 */
 updateTransactionForm.patch = (args: { transaction: number | { id: number } } | [transaction: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

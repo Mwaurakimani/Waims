@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    Route::get('dashboard/transactions/export', [TransactionController::class, 'export'])
+        ->name('dashboard.transactions.export');
+
     Route::inertia('dashboard/transactions/create', 'Dashboard/User/UsersCreate')
         ->name('dashboard.transactions.create');
 

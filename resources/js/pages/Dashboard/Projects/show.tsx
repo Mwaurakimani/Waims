@@ -48,7 +48,6 @@ export default function ProjectDetailView({
                             <TabsTrigger value="assignments">Assignments</TabsTrigger>
                             <TabsTrigger value="milestones">Milestones</TabsTrigger>
                             <TabsTrigger value="financials">Financials</TabsTrigger>
-                            <TabsTrigger value="requests">Requests</TabsTrigger>
                         </TabsList>
 
                         {/* Overview Section */}

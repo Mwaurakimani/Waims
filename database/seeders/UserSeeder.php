@@ -33,17 +33,18 @@ class UserSeeder extends Seeder
                 'role_id' => 3,
             ],
             [
-                'name' => 'citizen',
-                'email' => 'citizen@email.com',
+                'name' => 'contractor',
+                'email' => 'contractor@email.com',
                 'password' => 'password',
                 'role_id' => 4,
             ],
             [
-                'name' => 'contractor',
-                'email' => 'contractor@email.com',
+                'name' => 'citizen',
+                'email' => 'citizen@email.com',
                 'password' => 'password',
                 'role_id' => 5,
             ],
+
         ];
         foreach ($users as $user) {
             if (!User::where('email', $user['email'])->exists()) {

@@ -47,6 +47,10 @@ function Pagination({ links }: { links: any[] }) {
 export default function TransactionList({ transactions }: { transactions: any }) {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
 
+    const handleExport = () => {
+        window.location.href = '/dashboard/transactions/export';
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Transactions" />
@@ -59,7 +63,7 @@ export default function TransactionList({ transactions }: { transactions: any })
                         <p className="text-sm text-muted-foreground">Manage project expenditures and fund releases.</p>
                     </div>
                     <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={handleExport}>
                             <Download className="mr-2 h-4 w-4" /> Export
                         </Button>
                     </div>

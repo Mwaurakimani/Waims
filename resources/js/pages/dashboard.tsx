@@ -1,129 +1,198 @@
-import { Head } from '@inertiajs/react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Head, usePage } from '@inertiajs/react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
-
-// --- Dummy Data ---
-const spendingData = [
-    { day: 'Mon', amount: 400 },
-    { day: 'Tue', amount: 300 },
-    { day: 'Wed', amount: 600 },
-    { day: 'Thu', amount: 800 },
-    { day: 'Fri', amount: 500 },
-    { day: 'Sat', amount: 200 },
-    { day: 'Sun', amount: 100 },
-];
-
-const activities = [
-    { id: 1, user: 'Alex', action: 'Approved budget', time: '2 mins ago' },
-    { id: 2, user: 'Sam', action: 'Created Project Alpha', time: '1 hour ago' },
-    { id: 3, user: 'System', action: 'Backup completed', time: '3 hours ago' },
-    { id: 4, user: 'Jordan', action: 'Updated status to Active', time: '5 hours ago' },
-    { id: 5, user: 'Taylor', action: 'Added new member', time: 'Yesterday' },
-];
-
-const projects = [
-    { id: 'PRJ-001', title: 'Skyline Plaza', location: 'New York', status: 'Active', spending: '$12,400' },
-    { id: 'PRJ-002', title: 'Oak Ridge Mall', location: 'Chicago', status: 'Pending', spending: '$8,200' },
-    { id: 'PRJ-003', title: 'Riverfront Park', location: 'Austin', status: 'Completed', spending: '$45,000' },
-    { id: 'PRJ-004', title: 'Tech Hub V2', location: 'Seattle', status: 'Active', spending: '$2,100' },
-];
+import { Progress } from '@/components/ui/progress';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'Dashboard', href: dashboard() }];
 
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+
+// --- Role-Specific Components ---
+
+const AdminDashboard = ({ data }: { data: any }) => (
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+        {Object.entries(data.stats).map(([key, value]) => (
+            <Card key={key}>
+                <CardHeader>
+                    <CardTitle className="text-sm font-medium capitalize text-muted-foreground">{key.replace(/_/g, ' ')}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-2xl font-bold">
+                        {typeof value === 'number' && key.includes('total_') ? `KES ${value.toLocaleString()}` : value}
+                    </p>
+                </CardContent>
+            </Card>
+        ))}
+        <Card className="col-span-1 lg:col-span-4">
+            <CardHeader>
+                <CardTitle>Projects by Status</CardTitle>
+            </CardHeader>
+            <CardContent className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                        <Pie data={data.projects_by_status} dataKey="count" nameKey="status" cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label>
+                            {data.projects_by_status.map((entry: any, index: number) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Tooltip />
+                    </PieChart>
+                </ResponsiveContainer>
+            </CardContent>
+        </Card>
+    </div>
+);
+
+const ModeratorDashboard = ({ data }: { data: any }) => (
+    <Card>
+        <CardHeader>
+            <CardTitle>Project Manager Overview</CardTitle>
+        </CardHeader>
+        <CardContent>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Manager</TableHead>
+                        <TableHead>Completed Projects</TableHead>
+                        <TableHead>Active Projects</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {data.managers.map((manager: any) => (
+                        <TableRow key={manager.id}>
+                            <TableCell>{manager.name}</TableCell>
+                            <TableCell>{manager.completed_projects}</TableCell>
+                            <TableCell>{manager.managed_projects.filter((p: any) => p.status !== 'completed').length}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </CardContent>
+    </Card>
+);
+
+const ManagerDashboard = ({ data }: { data: any }) => (
+    <Card>
+        <CardHeader>
+            <CardTitle>My Projects</CardTitle>
+        </CardHeader>
+        <CardContent>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Project</TableHead>
+                        <TableHead>Contractor</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Financial Progress</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {data.projects.map((project: any) => (
+                        <TableRow key={project.id}>
+                            <TableCell>{project.title}</TableCell>
+                            <TableCell>{project.contractor?.name || 'N/A'}</TableCell>
+                            <TableCell><Badge>{project.status}</Badge></TableCell>
+                            <TableCell>
+                                <div className="flex items-center gap-2">
+                                    <Progress value={project.progress} className="w-[60%]" />
+                                    <span>{project.progress}%</span>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </CardContent>
+    </Card>
+);
+
+const ContractorDashboard = ({ data }: { data: any }) => (
+    <div className="space-y-6">
+        <Card>
+            <CardHeader><CardTitle>Open for Tendering</CardTitle></CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader><TableRow><TableHead>Title</TableHead><TableHead>Budget</TableHead></TableRow></TableHeader>
+                    <TableBody>
+                        {data.open_projects.map((p: any) => <TableRow key={p.id}><TableCell>{p.title}</TableCell><TableCell>KES {p.budget.toLocaleString()}</TableCell></TableRow>)}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader><CardTitle>My Awarded Projects</CardTitle></CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader><TableRow><TableHead>Title</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
+                    <TableBody>
+                        {data.my_projects.map((p: any) => <TableRow key={p.id}><TableCell>{p.title}</TableCell><TableCell><Badge>{p.status}</Badge></TableCell></TableRow>)}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+    </div>
+);
+
+const CitizenDashboard = ({ data }: { data: any }) => (
+    <Card>
+        <CardHeader>
+            <CardTitle>Ongoing and Completed Projects</CardTitle>
+        </CardHeader>
+        <CardContent>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Project</TableHead>
+                        <TableHead>Manager</TableHead>
+                        <TableHead>Status</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {data.projects.map((project: any) => (
+                        <TableRow key={project.id}>
+                            <TableCell>{project.title}</TableCell>
+                            <TableCell>{project.manager?.name || 'N/A'}</TableCell>
+                            <TableCell><Badge>{project.status}</Badge></TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </CardContent>
+    </Card>
+);
+
+
 export default function Dashboard() {
+    const { auth, dashboard } = usePage().props as any;
+    const userRole = auth.user.role.name;
+
+    const renderDashboard = () => {
+        switch (userRole) {
+            case 'Admin':
+                return <AdminDashboard data={dashboard} />;
+            case 'Moderator':
+                return <ModeratorDashboard data={dashboard} />;
+            case 'Project Manager':
+                return <ManagerDashboard data={dashboard} />;
+            case 'Contractor':
+                return <ContractorDashboard data={dashboard} />;
+            case 'Citizen':
+                return <CitizenDashboard data={dashboard} />;
+            default:
+                return <Card><CardHeader><CardTitle>Welcome</CardTitle></CardHeader><CardContent><p>Your dashboard is being set up.</p></CardContent></Card>;
+        }
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <main className="flex flex-col gap-6 p-6">
-                {/* Top Section: Charts & Activity */}
-                <div className="flex flex-col gap-6 lg:flex-row">
-                    {/* Weekly Spending Chart */}
-                    <Card className="min-h-[400px] flex-1">
-                        <CardHeader>
-                            <CardTitle>Weekly Spending</CardTitle>
-                        </CardHeader>
-                        <CardContent className="h-[300px]">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={spendingData}>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                    <XAxis dataKey="day" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Bar dataKey="amount" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </CardContent>
-                    </Card>
-
-                    {/* Recent Activity Feed */}
-                    <Card className="w-full lg:w-[350px]">
-                        <CardHeader>
-                            <CardTitle>Recent Activity</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-6">
-                                {activities.map((item) => (
-                                    <div key={item.id} className="flex gap-4 text-sm">
-                                        <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-blue-500" />
-                                        <div className="flex flex-col">
-                                            <p className="font-medium text-gray-900 dark:text-gray-100">
-                                                <span className="font-bold">{item.user}</span> {item.action}
-                                            </p>
-                                            <span className="text-xs text-muted-foreground">{item.time}</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Bottom Section: Watched Projects Table */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Watched Projects</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>ID</TableHead>
-                                    <TableHead>Title</TableHead>
-                                    <TableHead>Location</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead>Spending</TableHead>
-                                    <TableHead className="text-right">Action</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {projects.map((project) => (
-                                    <TableRow key={project.id}>
-                                        <TableCell className="font-mono text-xs">{project.id}</TableCell>
-                                        <TableCell className="font-medium">{project.title}</TableCell>
-                                        <TableCell>{project.location}</TableCell>
-                                        <TableCell>
-                                            <Badge variant={project.status === 'Active' ? 'default' : 'secondary'}>
-                                                {project.status}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell>{project.spending}</TableCell>
-                                        <TableCell className="text-right">
-                                            <Button variant="ghost" size="sm">
-                                                View Details
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
+                {renderDashboard()}
             </main>
         </AppLayout>
     );

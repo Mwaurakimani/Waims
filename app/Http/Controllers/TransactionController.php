@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TransactionController extends Controller
 {
@@ -107,8 +108,6 @@ class TransactionController extends Controller
         ]);
     }
 
-    // app/Http/Controllers/TransactionController.php
-
     /**
      * Show the form for editing the transaction status.
      */
@@ -133,5 +132,54 @@ class TransactionController extends Controller
         $transaction->update($validated);
 
         return redirect()->route('dashboard.transactions')->with('success', 'Transaction status updated.');
+    }
+
+    /**
+     * Export transactions to a CSV file.
+     */
+    public function export(): StreamedResponse
+    {
+        return new StreamedResponse(function () {
+            $handle = fopen('php://output', 'w');
+
+            // Add CSV headers
+            fputcsv($handle, [
+                'Transaction ID',
+                'Date',
+                'Reference',
+                'Project Title',
+                'Project Manager',
+                'Project Contractor',
+                'Amount',
+                'Currency',
+                'Status',
+                'Recorded By',
+                'Created At',
+            ]);
+
+            // Fetch and stream transactions
+            Transaction::with(['project.manager', 'project.contractor', 'user'])->chunk(200, function ($transactions) use ($handle) {
+                foreach ($transactions as $transaction) {
+                    fputcsv($handle, [
+                        $transaction->id,
+                        $transaction->date,
+                        $transaction->reference,
+                        $transaction->project->title ?? 'N/A',
+                        $transaction->project->manager->name ?? 'N/A',
+                        $transaction->project->contractor->name ?? 'N/A',
+                        $transaction->amount,
+                        'KES', // Assuming KES, can be made dynamic
+                        ucfirst(str_replace('_', ' ', $transaction->status)),
+                        $transaction->user->name ?? 'N/A',
+                        $transaction->created_at->toDateTimeString(),
+                    ]);
+                }
+            });
+
+            fclose($handle);
+        }, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="transactions_'.date('Y-m-d_H-i-s').'.csv"',
+        ]);
     }
 }
